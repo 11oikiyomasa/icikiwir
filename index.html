@@ -1,0 +1,2682 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#181818" />
+  <meta name="description" content="A personalized reading feed with thoughtful stories, writers, and ideas to explore." />
+  <title>Medium — For you</title>
+  <style>
+    :root {
+      --ink: #242424;
+      --muted: #6b6b6b;
+      --line: #e6e6e6;
+      --soft: #f7f7f7;
+      --green: #1a8917;
+      --paper: #fff;
+      --serif: Georgia, 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { height: 70px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 max(28px, calc((100vw - 1320px) / 2)); position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.97); backdrop-filter: blur(12px); }
+    .brand { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .brand-mark { font: 700 36px/.8 var(--serif); letter-spacing: -4px; transform: scaleX(1.05); }
+    .brand-name { font: 700 23px/1 var(--serif); letter-spacing: -.8px; }
+    .top-actions { display: flex; align-items: center; gap: 25px; color: #595959; font-size: 14px; }
+    .search-box { display: flex; align-items: center; gap: 9px; background: #f5f5f5; padding: 9px 14px; border-radius: 24px; width: 215px; color: #757575; }
+    .search-box input { border: 0; outline: 0; background: transparent; min-width: 0; width: 100%; color: var(--ink); font-size: 14px; }
+    .text-action { border: 0; background: transparent; cursor: pointer; color: #595959; padding: 6px 0; }
+    .get-started { color: white; background: #191919; border: 0; border-radius: 22px; padding: 10px 16px; font-size: 14px; cursor: pointer; }
+    .avatar { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #e7e1d8; color: #6f5e4b; font-size: 12px; font-weight: 650; }
+    .layout { width: min(1280px, calc(100% - 56px)); margin: 0 auto; display: grid; grid-template-columns: 180px minmax(0, 680px) 300px; gap: 52px; align-items: start; }
+    .left-rail { position: sticky; top: 92px; min-height: calc(100vh - 92px); padding: 42px 0 25px; border-right: 1px solid var(--line); }
+    .rail-list { display: grid; gap: 5px; }
+    .rail-link { display: flex; align-items: center; gap: 15px; border: 0; background: transparent; border-radius: 7px; color: #555; font-size: 14px; padding: 12px 12px; text-align: left; cursor: pointer; width: calc(100% - 18px); }
+    .rail-link.active { background: #f6f6f6; color: var(--ink); font-weight: 600; }
+    .rail-icon { width: 20px; display: inline-flex; justify-content: center; color: #777; font-size: 17px; }
+    .rail-divider { border: 0; border-top: 1px solid var(--line); margin: 21px 18px 18px 10px; }
+    .rail-label { color: #777; text-transform: uppercase; letter-spacing: .08em; font-size: 10px; margin: 0 0 10px 13px; }
+    .rail-bottom { position: absolute; bottom: 18px; left: 12px; color: #888; font-size: 11px; line-height: 2.1; max-width: 145px; }
+    .rail-bottom a { margin-right: 9px; }
+    main { min-width: 0; padding: 37px 0 80px; }
+    .welcome { margin-bottom: 30px; }
+    .eyebrow { text-transform: uppercase; color: #777; letter-spacing: .1em; font-size: 10px; font-weight: 650; margin: 0 0 8px; }
+    h1 { font: 500 31px/1.16 var(--serif); letter-spacing: -.7px; margin: 0; }
+    .welcome p:last-child { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
+    .tabs { display: flex; align-items: center; gap: 27px; border-bottom: 1px solid var(--line); margin-bottom: 7px; }
+    .tab { background: transparent; border: 0; color: #737373; padding: 13px 0 12px; font-size: 14px; cursor: pointer; position: relative; }
+    .tab.selected { color: var(--ink); }
+    .tab.selected::after { content: ''; height: 1px; background: var(--ink); position: absolute; left: 0; right: 0; bottom: -1px; }
+    .story { display: grid; grid-template-columns: minmax(0, 1fr) 154px; gap: 27px; padding: 23px 0 24px; border-bottom: 1px solid var(--line); align-items: center; }
+    .story-copy { min-width: 0; }
+    .byline { display: flex; gap: 8px; align-items: center; color: #4e4e4e; font-size: 12px; margin-bottom: 10px; }
+    .mini-avatar { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; font-weight: 700; background: #ded5c8; color: #6c5743; flex: 0 0 auto; }
+    .mini-avatar.blue { background: #d9e5ec; color: #456575; }
+    .mini-avatar.pink { background: #ecdde3; color: #795567; }
+    .mini-avatar.green { background: #dce8db; color: #55734f; }
+    .mini-avatar.gold { background: #efe5cd; color: #77643a; }
+    .byline strong { font-weight: 600; color: #343434; }
+    .story h2 { font: 700 21px/1.22 var(--serif); letter-spacing: -.25px; margin: 0 0 7px; }
+    .story-summary { font: 15px/1.42 var(--serif); color: #666; margin: 0; max-width: 440px; }
+    .story-image { width: 154px; height: 112px; object-fit: cover; background: #f1f1f1; }
+    .story-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 13px; color: #757575; font-size: 11px; }
+    .meta-left { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .topic-pill { background: #f2f2f2; color: #595959; border-radius: 14px; padding: 5px 9px; font-size: 10px; }
+    .meta-dot { color: #aaa; }
+    .story-tools { display: flex; gap: 15px; align-items: center; }
+    .bookmark { border: 0; background: transparent; padding: 3px; color: #6b6b6b; cursor: pointer; font-size: 17px; line-height: 1; }
+    .bookmark[aria-pressed="true"] { color: var(--green); }
+    .more { border: 0; background: transparent; color: #777; cursor: pointer; letter-spacing: 2px; padding: 2px; }
+    .right-rail { padding-top: 43px; position: sticky; top: 70px; }
+    .side-section { margin-bottom: 32px; }
+    .side-section h2 { font-size: 14px; margin: 0 0 16px; font-weight: 650; }
+    .topics { display: flex; flex-wrap: wrap; gap: 8px; }
+    .topic-button { border: 0; background: #f2f2f2; border-radius: 20px; padding: 9px 13px; color: #454545; font-size: 12px; cursor: pointer; transition: background .15s ease; }
+    .topic-button:hover { background: #e8e8e8; }
+    .pick { display: grid; grid-template-columns: 25px 1fr; gap: 10px; margin: 0 0 17px; }
+    .pick-number { font: 600 18px/1 var(--serif); color: #ddd; }
+    .pick-byline { font-size: 10px; color: #5c5c5c; margin: 0 0 5px; }
+    .pick h3 { font: 650 13px/1.35 var(--serif); margin: 0; }
+    .see-more { color: var(--green); font-size: 12px; }
+    .membership-card { border-top: 1px solid var(--line); padding-top: 23px; }
+    .membership-card h2 { font: 600 21px/1.22 var(--serif); margin: 0 0 9px; }
+    .membership-card p { color: #666; font: 13px/1.5 var(--serif); margin: 0 0 15px; }
+    .membership-card button { border: 1px solid #191919; background: #191919; color: white; border-radius: 22px; padding: 9px 14px; font-size: 12px; cursor: pointer; }
+    .toast { position: fixed; left: 50%; bottom: 25px; transform: translate(-50%, 15px); opacity: 0; pointer-events: none; background: #202020; color: #fff; padding: 12px 18px; border-radius: 24px; font-size: 13px; transition: all .2s ease; z-index: 20; box-shadow: 0 5px 18px #0002; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .empty-state { display: none; padding: 48px 0; color: #777; font: 17px var(--serif); }
+    .empty-state.show { display: block; }
+    .story.hidden { display: none; }
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 150px minmax(0, 1fr) 260px; gap: 30px; }
+      .left-rail { padding-right: 4px; }
+      .story { grid-template-columns: minmax(0, 1fr) 135px; gap: 19px; }
+      .story-image { width: 135px; height: 100px; }
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 58px minmax(0, 680px); width: min(800px, calc(100% - 40px)); gap: 27px; }
+      .left-rail { padding-top: 33px; }
+      .rail-link { width: 42px; justify-content: center; padding: 12px 0; }
+      .rail-link span:last-child, .rail-label, .rail-divider, .rail-bottom { display: none; }
+      .rail-icon { font-size: 19px; }
+      .right-rail { display: none; }
+      main { padding-top: 32px; }
+    }
+    @media (max-width: 620px) {
+      .topbar { height: 60px; padding: 0 16px; }
+      .brand-mark { font-size: 31px; }
+      .brand-name { font-size: 21px; }
+      .top-actions { gap: 14px; }
+      .search-box { width: 38px; height: 38px; padding: 0; justify-content: center; background: transparent; }
+      .search-box input { display: none; }
+      .text-action { display: none; }
+      .get-started { padding: 9px 13px; font-size: 12px; }
+      .avatar { display: none; }
+      .layout { width: 100%; display: block; }
+      .left-rail { position: static; min-height: 0; border: 0; border-bottom: 1px solid var(--line); padding: 0 16px; }
+      .rail-list { display: flex; justify-content: space-around; }
+      .rail-link { width: auto; padding: 12px 8px; }
+      .rail-link:nth-child(n+4), .rail-divider { display: none; }
+      main { padding: 27px 20px 50px; }
+      .welcome { margin-bottom: 23px; }
+      h1 { font-size: 28px; }
+      .story { grid-template-columns: minmax(0,1fr) 92px; gap: 12px; padding: 19px 0; }
+      .story-image { width: 92px; height: 82px; }
+      .story h2 { font-size: 18px; }
+      .story-summary { font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+      .byline { font-size: 10px; margin-bottom: 8px; }
+      .story-meta { margin-top: 10px; font-size: 10px; }
+      .story-tools { gap: 9px; }
+      .topic-pill { padding: 4px 7px; }
+    }
+  </style>
+  <style id="feed-refinement">
+    :root {
+      --ink: #242424;
+      --muted: #6b6b6b;
+      --line: #e6e6e6;
+      --soft: #f5f5f5;
+      --green: #1a8917;
+      --paper: #fff;
+      --serif: Charter, Georgia, 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    body { color: var(--ink); background: #fff; font-family: var(--sans); }
+    .topbar {
+      height: 68px;
+      padding: 0 max(32px, calc((100vw - 1290px) / 2));
+      border-bottom-color: #e6e6e6;
+      background: rgba(255,255,255,.98);
+    }
+    .brand { gap: 6px; }
+    .brand-mark { font-size: 37px; letter-spacing: -4.2px; }
+    .brand-name { font-size: 31px; letter-spacing: -1.45px; }
+    .top-actions { gap: 23px; font-size: 14px; }
+    .search-box {
+      width: 218px;
+      height: 40px;
+      padding: 0 14px;
+      border: 1px solid transparent;
+      background: #f5f5f5;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .search-box:focus-within { background: #fff; border-color: #d6d6d6; }
+    .search-box > svg { width: 17px; height: 17px; flex: 0 0 auto; stroke: #777; }
+    .search-box input { font-size: 14px; }
+    .text-action { display: inline-flex; align-items: center; gap: 7px; color: #555; }
+    .text-action svg { width: 17px; height: 17px; flex: 0 0 auto; }
+    .text-action:hover { color: #111; }
+    .get-started { background: #191919; padding: 10px 17px; font-size: 13px; }
+    .avatar { width: 32px; height: 32px; border: 1px solid #ece7e0; }
+
+    .layout {
+      width: min(1240px, calc(100% - 64px));
+      grid-template-columns: 170px minmax(0, 1fr) 290px;
+      column-gap: clamp(30px, 4vw, 52px);
+      align-items: start;
+    }
+    .left-rail {
+      top: 68px;
+      min-height: calc(100vh - 68px);
+      padding: 31px 13px 25px 0;
+      border-right: 1px solid #f0f0f0;
+    }
+    .rail-list { gap: 3px; }
+    .rail-link {
+      width: calc(100% - 12px);
+      min-height: 40px;
+      padding: 9px 10px;
+      gap: 13px;
+      border-radius: 5px;
+      color: #656565;
+      font-size: 13px;
+      transition: color .14s ease, background .14s ease;
+    }
+    .rail-link:hover { background: #f7f7f7; color: #242424; }
+    .rail-link.active {
+      color: #242424;
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    .rail-icon { width: 19px; height: 19px; flex: 0 0 19px; color: #777; }
+    .rail-icon svg { display: block; width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
+    .rail-link.active .rail-icon { color: #242424; }
+    .rail-divider { margin: 18px 18px 17px 10px; border-color: #e8e8e8; }
+    .rail-label { margin: 0 0 9px 12px; color: #8a8a8a; font-size: 10px; letter-spacing: .08em; }
+    .rail-bottom { left: 11px; bottom: 16px; color: #8a8a8a; font-size: 11px; line-height: 1.9; }
+    .rail-bottom a:hover { color: #242424; }
+
+    main { padding: 34px 0 80px; }
+    .welcome { margin-bottom: 12px; }
+    .eyebrow { display: none; }
+    h1 { font: 700 34px/1.12 var(--serif); letter-spacing: -1.15px; }
+    .welcome p:last-child { margin: 7px 0 0; color: #757575; font-size: 14px; line-height: 1.45; }
+    .tabs { gap: 29px; margin-bottom: 0; border-bottom-color: #e6e6e6; }
+    .tab { padding: 13px 0 14px; color: #777; font-size: 13px; }
+    .tab.selected { color: #242424; font-weight: 600; }
+    .tab.selected::after { height: 2px; background: #242424; }
+    .story {
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 24px;
+      padding: 22px 0 21px;
+      border-bottom-color: #e6e6e6;
+      align-items: center;
+    }
+    .byline { gap: 8px; margin-bottom: 9px; color: #595959; font-size: 11px; }
+    .mini-avatar { width: 20px; height: 20px; font-size: 8px; }
+    .byline strong { color: #292929; font-weight: 600; }
+    .story h2 { margin: 0 0 6px; font: 700 20px/1.25 var(--serif); letter-spacing: -.36px; }
+    .story-summary { max-width: 440px; color: #6b6b6b; font: 14px/1.45 var(--sans); }
+    .story-image { width: 112px; height: 112px; object-fit: cover; background: #f2f2f2; }
+    .story-meta { margin-top: 13px; color: #777; font-size: 11px; }
+    .meta-left { gap: 8px; }
+    .topic-pill { padding: 4px 9px; border-radius: 14px; background: #f2f2f2; color: #555; font-size: 10px; }
+    .story-tools { gap: 12px; }
+    .bookmark, .more { display: grid; place-items: center; width: 25px; height: 25px; padding: 0; border-radius: 50%; }
+    .bookmark { position: relative; font-size: 0; }
+    .bookmark::before { content: ''; width: 11px; height: 14px; border: 1.4px solid currentColor; border-radius: 1px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 74%, 0 100%); }
+    .bookmark[aria-pressed="true"]::before { border-color: var(--green); background: var(--green); }
+    .bookmark:hover, .more:hover { background: #f4f4f4; }
+    .bookmark svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .bookmark[aria-pressed="true"] svg { fill: var(--green); stroke: var(--green); }
+    .more { font-size: 15px; letter-spacing: 1px; }
+
+    .right-rail { top: 68px; padding-top: 39px; }
+    .side-section { margin-bottom: 30px; }
+    .side-section h2 { margin-bottom: 14px; color: #292929; font-size: 14px; line-height: 1.35; font-weight: 650; }
+    .topics { gap: 8px; }
+    .topic-button { padding: 8px 12px; background: #f2f2f2; color: #444; font-size: 12px; }
+    .topic-button:hover { background: #e8e8e8; }
+    .topic-button[aria-pressed="true"] { background: #dedede; color: #242424; }
+    .pick { grid-template-columns: 25px 1fr; gap: 9px; margin-bottom: 16px; }
+    .pick-number { color: #d5d5d5; font-size: 18px; }
+    .pick-byline { margin-bottom: 4px; color: #777; font-size: 10px; }
+    .pick h3 { color: #292929; font: 650 13px/1.35 var(--serif); }
+    .see-more { color: var(--green); font-size: 12px; }
+    .membership-card { padding-top: 21px; border-top-color: #e6e6e6; }
+    .membership-card h2 { font-size: 20px; letter-spacing: -.2px; }
+    .membership-card p { color: #6b6b6b; font: 13px/1.5 var(--sans); }
+    .membership-card button { border-color: #191919; background: #191919; padding: 9px 15px; font-size: 12px; }
+    .toast { font-family: var(--sans); }
+    .story-title-button { display: inline; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; letter-spacing: inherit; line-height: inherit; text-align: left; cursor: pointer; }
+    .story-title-button:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .story-state { display: none; color: var(--green); font-size: 10px; white-space: nowrap; }
+    .story-state.visible { display: inline; }
+    .story-state::before { content: '·'; margin-right: 7px; color: #aaa; }
+    .search-toggle, .search-clear { display: none; border: 0; background: transparent; color: #666; cursor: pointer; padding: 4px; }
+    .search-clear.visible { display: grid; place-items: center; font-size: 18px; }
+    .reader { width: min(740px, calc(100vw - 36px)); max-width: none; max-height: min(900px, calc(100dvh - 36px)); padding: 0; border: 0; border-radius: 3px; color: var(--ink); background: #fff; box-shadow: 0 18px 70px #0003; overflow: hidden; }
+    .reader::backdrop { background: rgb(20 20 20 / 42%); backdrop-filter: blur(2px); }
+    .reader-toolbar { display: flex; justify-content: space-between; align-items: center; min-height: 53px; padding: 0 22px; border-bottom: 1px solid var(--line); color: #777; font-size: 12px; }
+    .reader-close { border: 0; background: transparent; color: #555; font-size: 23px; line-height: 1; cursor: pointer; padding: 5px 8px; }
+    .reader-progress { height: 2px; background: #f0f0f0; }
+    .reader-progress span { display: block; width: 0; height: 100%; background: var(--green); transition: width .12s linear; }
+    .reader-scroll { max-height: calc(100dvh - 145px); overflow: auto; overscroll-behavior: contain; padding: clamp(30px, 6vw, 58px) clamp(25px, 9vw, 82px) 42px; }
+    .reader-kicker { margin: 0 0 13px; color: #777; font-size: 12px; }
+    .reader-title { margin: 0 0 17px; font: 700 clamp(30px, 5vw, 42px)/1.12 var(--serif); letter-spacing: -1px; }
+    .reader-byline { margin: 0 0 34px; color: #666; font-size: 13px; }
+    .reader-body { color: #292929; font: 19px/1.72 var(--serif); }
+    .reader-body p { margin: 0 0 22px; }
+    .reader-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 22px; border-top: 1px solid var(--line); background: #fff; }
+    .reader-actions-group { display: flex; flex-wrap: wrap; gap: 9px; }
+    .reader-action { border: 1px solid #d8d8d8; border-radius: 22px; background: #fff; padding: 9px 14px; color: #333; font-size: 12px; cursor: pointer; }
+    .reader-action:hover { background: #f7f7f7; }
+    .reader-share { display: inline-flex; align-items: center; gap: 7px; }
+    .reader-share svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .reader-action.primary { border-color: #191919; background: #191919; color: #fff; }
+    .reader-action[aria-pressed="true"] { color: var(--green); border-color: #bfd8bd; }
+    .reader-action.primary[aria-pressed="true"] { border-color: #191919; background: #191919; color: #fff; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 155px minmax(0, 1fr); column-gap: 34px; }
+      .right-rail { display: none; }
+      .story { grid-template-columns: minmax(0, 1fr) 112px; gap: 20px; }
+      .story-image { width: 112px; height: 112px; }
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 58px minmax(0, 1fr); width: min(800px, calc(100% - 40px)); gap: 27px; }
+      .left-rail { padding: 30px 6px 25px 0; }
+      .rail-link { width: 43px; justify-content: center; padding: 10px 0; }
+      .rail-link span:last-child, .rail-label, .rail-divider, .rail-bottom { display: none; }
+      .rail-icon { font-size: 18px; }
+      main { padding-top: 30px; }
+    }
+    @media (max-width: 620px) {
+      .topbar { height: 60px; padding: 0 16px; }
+      .brand-mark { font-size: 32px; }
+      .brand-name { font-size: 21px; }
+      .top-actions { gap: 13px; }
+      .search-box { width: 38px; height: 38px; padding: 0; justify-content: center; background: transparent; border-color: transparent; }
+      .search-box > svg { display: none; }
+      .search-box input { display: none; }
+      .search-toggle { display: grid; place-items: center; width: 36px; height: 36px; }
+      .search-toggle svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+      .search-box.is-open { position: absolute; left: 16px; right: 16px; z-index: 2; width: auto; justify-content: flex-start; padding: 0 10px; border-color: #ddd; background: #fff; box-shadow: 0 2px 9px #00000012; }
+      .search-box.is-open > svg { display: block; }
+      .search-box.is-open input { display: block; }
+      .search-box.is-open .search-toggle { display: none; }
+      .search-box.is-open .search-clear { display: grid; place-items: center; font-size: 20px; }
+      .text-action { display: none; }
+      .get-started { padding: 9px 13px; font-size: 12px; }
+      .avatar { display: none; }
+      .layout { width: 100%; display: block; }
+      .left-rail { position: static; min-height: 0; padding: 0 10px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .rail-list { display: flex; justify-content: space-around; }
+      .rail-link { width: auto; min-width: 44px; padding: 12px 8px; }
+      .rail-link:nth-child(n+4) { display: none; }
+      main { padding: 27px 20px 50px; }
+      .welcome { margin-bottom: 13px; }
+      h1 { font-size: 30px; }
+      .story { grid-template-columns: minmax(0, 1fr) 88px; gap: 12px; padding: 19px 0; }
+      .story-image { width: 88px; height: 88px; }
+      .story h2 { font-size: 18px; }
+      .story-summary { font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+      .byline { font-size: 10px; margin-bottom: 8px; }
+      .story-meta { margin-top: 10px; font-size: 10px; }
+      .story-tools { gap: 5px; }
+      .reader { width: 100vw; max-height: 100dvh; height: 100dvh; border-radius: 0; }
+      .reader-toolbar { min-height: 50px; padding: 0 17px; }
+      .reader-scroll { max-height: calc(100dvh - 170px); padding: 34px 23px; }
+      .reader-body { font-size: 18px; line-height: 1.68; }
+      .reader-actions { align-items: center; padding: 11px 14px; }
+      .reader-actions-group { gap: 6px; }
+      .reader-action { padding: 9px 11px; font-size: 11px; }
+      .reader-action.primary { width: 100px; min-height: 44px; height: auto; align-self: center; flex: 0 0 auto; padding: 6px 8px; line-height: 1.2; white-space: normal; }
+    }
+  </style>
+  <style id="writer-styles">
+    .write-action { display: inline-flex; align-items: center; gap: 7px; }
+    .write-action svg { width: 17px; height: 17px; flex: 0 0 auto; }
+    .composer {
+      width: min(860px, calc(100vw - 40px));
+      max-width: none;
+      max-height: min(900px, calc(100dvh - 32px));
+      padding: 0;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 18px 70px #0003;
+      overflow: hidden;
+    }
+    .composer::backdrop { background: rgb(20 20 20 / 42%); backdrop-filter: blur(2px); }
+    .composer-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 60px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+    .composer-status { color: #777; font-size: 12px; }
+    .composer-toolbar-actions { display: flex; align-items: center; gap: 9px; }
+    .composer-button { border: 1px solid #d8d8d8; border-radius: 20px; background: #fff; padding: 9px 14px; color: #333; font-size: 12px; cursor: pointer; }
+    .composer-button:hover { background: #f7f7f7; }
+    .composer-button.primary { border-color: #191919; background: #191919; color: #fff; }
+    .composer-button[aria-pressed="true"] { border-color: #bfd8bd; color: var(--green); }
+    .composer-close { border: 0; background: transparent; color: #555; font-size: 23px; line-height: 1; cursor: pointer; padding: 5px 8px; }
+    .composer-content { width: min(700px, 100%); height: min(760px, calc(100dvh - 100px)); margin: 0 auto; overflow: auto; padding: clamp(38px, 7vw, 72px) clamp(24px, 6vw, 60px) 34px; }
+    .composer-title { display: block; width: 100%; border: 0; outline: 0; padding: 0; color: #242424; background: transparent; font: 700 clamp(32px, 5vw, 44px)/1.12 var(--serif); letter-spacing: -1px; }
+    .composer-title::placeholder { color: #b7b7b7; opacity: 1; }
+    .composer-body { display: block; width: 100%; min-height: 390px; margin-top: 24px; border: 0; outline: 0; padding: 0; resize: vertical; color: #292929; background: transparent; font: 18px/1.72 var(--serif); }
+    .composer-body::placeholder { color: #999; opacity: 1; }
+    .composer-note { margin: 28px 0 0; color: #888; font-size: 11px; }
+    .composer-preview { display: none; min-height: 390px; }
+    .composer-preview-title { margin: 0 0 24px; font: 700 clamp(32px, 5vw, 44px)/1.12 var(--serif); letter-spacing: -1px; }
+    .composer-preview-body { color: #292929; font: 18px/1.72 var(--serif); overflow-wrap: anywhere; }
+    .composer-preview-body p { margin: 0 0 22px; white-space: pre-wrap; }
+    .draft-library { margin: 0 0 34px; padding: 18px; border: 1px solid #e8e8e8; border-radius: 7px; background: #fafafa; }
+    .draft-library-heading { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+    .draft-library-heading h3 { margin: 0 0 4px; font: 650 18px/1.2 var(--serif); }
+    .draft-library-heading p { margin: 0; color: #777; font-size: 11px; line-height: 1.4; }
+    .draft-list { display: grid; gap: 8px; margin-top: 16px; }
+    .draft-row { padding: 11px 12px; border: 1px solid #e8e8e8; border-radius: 6px; background: #fff; }
+    .draft-row-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .draft-open { display: grid; min-width: 0; gap: 4px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+    .draft-open[aria-current="true"] .draft-name { color: var(--green); }
+    .draft-name { overflow: hidden; color: #292929; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .draft-date { color: #888; font-size: 10px; }
+    .draft-row-actions { display: flex; flex: 0 0 auto; gap: 5px; }
+    .draft-row-actions button, .draft-rename-form button { padding: 6px 9px; border: 1px solid #dedede; border-radius: 16px; background: #fff; color: #555; font-size: 10px; cursor: pointer; }
+    .draft-row-actions button:hover, .draft-rename-form button:hover { background: #f5f5f5; }
+    .draft-row-actions .draft-delete { color: #a33; }
+    .draft-rename-form { display: flex; gap: 7px; margin-top: 10px; }
+    .draft-rename-form[hidden] { display: none; }
+    .draft-rename-form input { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #d8d8d8; border-radius: 5px; color: var(--ink); background: #fff; }
+    .draft-rename-form .draft-rename-save { border-color: #191919; background: #191919; color: #fff; }
+    .draft-empty { margin: 16px 0 0; color: #777; font: 14px/1.5 var(--serif); }
+    #composer[data-mode="preview"] .composer-title,
+    #composer[data-mode="preview"] .composer-body,
+    #composer[data-mode="preview"] .composer-note { display: none; }
+    #composer[data-mode="preview"] .composer-preview { display: block; }
+    .write-action:focus-visible, .composer button:focus-visible, .composer input:focus-visible, .composer textarea:focus-visible { outline: 2px solid #1a8917; outline-offset: 3px; }
+    @media (max-width: 620px) {
+      .text-action.write-action { display: inline-flex; width: 36px; height: 36px; justify-content: center; padding: 0; }
+      .write-action span { display: none; }
+      .composer { width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; border-radius: 0; }
+      .composer-toolbar { min-height: 56px; gap: 7px; padding: 0 11px; }
+      .composer-status { font-size: 10px; }
+      .composer-toolbar-actions { gap: 5px; }
+      .composer-button { padding: 8px 10px; font-size: 11px; }
+      .composer-content { width: 100%; height: calc(100dvh - 56px); padding: 42px 24px 30px; }
+      .composer-title, .composer-preview-title { font-size: 32px; }
+      .composer-body { min-height: calc(100dvh - 220px); font-size: 18px; }
+      .draft-library { margin-bottom: 26px; padding: 13px; }
+      .draft-library-heading { align-items: flex-start; }
+      .draft-library-heading .composer-button { flex: 0 0 auto; }
+      .draft-row { padding: 10px; }
+      .draft-row-summary { align-items: flex-start; flex-direction: column; gap: 9px; }
+      .draft-row-actions { width: 100%; }
+      .draft-row-actions button { flex: 1; }
+    }
+  </style>
+  <style id="stats-styles">
+    .stats-view { padding-top: 0; }
+    .stats-heading { margin: 0 0 24px; }
+    .stats-heading h1 { margin: 0; }
+    .stats-heading p:last-child { margin: 8px 0 0; color: #757575; font-size: 14px; line-height: 1.45; }
+    .stats-scope-note { margin: 25px 0 20px; padding: 14px 16px; border: 1px solid #ececec; border-radius: 4px; background: #fafafa; color: #666; font-size: 12px; line-height: 1.5; }
+    .stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+    .stats-card { min-width: 0; padding: 18px; border: 1px solid #e8e8e8; border-radius: 4px; background: #fff; }
+    .stats-card dt { color: #666; font-size: 12px; font-weight: 550; }
+    .stats-card dd { margin: 9px 0 4px; color: #242424; font: 700 32px/1 var(--serif); letter-spacing: -.5px; }
+    .stats-card p { margin: 0; color: #777; font-size: 11px; line-height: 1.45; }
+    .stats-footnote { margin: 17px 0 0; color: #777; font-size: 11px; line-height: 1.5; }
+    @media (max-width: 620px) {
+      .left-rail .rail-link[data-view="Stats"] { display: flex; }
+      .left-rail .rail-link[data-toast] { display: none; }
+      .stats-heading { margin-bottom: 18px; }
+      .stats-scope-note { margin: 20px 0 16px; padding: 12px 13px; }
+      .stats-grid { gap: 8px; }
+      .stats-card { padding: 14px 12px; }
+      .stats-card dd { font-size: 28px; }
+    }
+  </style>
+  <style id="private-sync-styles">
+    .sync-action { display: inline-flex !important; align-items: center; justify-content: center; border: 1px solid #dedede; border-radius: 18px; padding: 8px 12px; color: #555; font-size: 12px; line-height: 1; }
+    .sync-action:hover { background: #f7f7f7; color: #242424; }
+    .sync-action:disabled { cursor: wait; opacity: .55; }
+    /* Keep the backend-only sync control out of the approved homepage header. */
+    #sync-button { display: none !important; }
+    @media (max-width: 620px) { .sync-action { padding: 7px 9px; font-size: 11px; } }
+  </style>
+  <style id="editor-styles">
+    .login-dialog { width: min(420px, calc(100vw - 32px)); padding: 28px; border: 1px solid #e8e8e8; border-radius: 6px; color: var(--ink); background: #fff; box-shadow: 0 18px 70px #0003; }
+    .login-dialog::backdrop { background: rgb(20 20 20 / 42%); backdrop-filter: blur(2px); }
+    .login-dialog h2 { margin: 0 0 8px; font: 700 25px/1.2 var(--serif); }
+    .login-dialog p { margin: 0 0 18px; color: #707070; font-size: 13px; line-height: 1.5; }
+    .login-dialog label, .story-fields label { display: grid; gap: 7px; color: #555; font-size: 12px; }
+    .login-dialog input, .story-fields input, .story-fields select { width: 100%; min-width: 0; padding: 10px 11px; border: 1px solid #d9d9d9; border-radius: 4px; color: var(--ink); background: #fff; }
+    .login-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .login-actions button, .story-admin-actions button { padding: 9px 13px; border: 1px solid #d8d8d8; border-radius: 20px; background: #fff; color: #333; font-size: 12px; cursor: pointer; }
+    .login-actions .primary { border-color: #191919; background: #191919; color: #fff; }
+    .login-error { min-height: 18px; margin-top: 9px; color: #9b2c2c; font-size: 12px; }
+    .story-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; margin: 24px 0 0; padding: 18px; border: 1px solid #e9e9e9; border-radius: 5px; background: #fafafa; }
+    .story-fields .full-width { grid-column: 1 / -1; }
+    .published-field { display: flex !important; align-items: center; gap: 9px !important; }
+    .published-field input { width: auto; }
+    .online-library { margin: 0 0 15px; padding: 16px; border: 1px solid #e8e8e8; border-radius: 6px; background: #fafafa; }
+    .online-library[hidden], .story-fields[hidden] { display: none; }
+    .online-library-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .online-library-heading h3 { margin: 0; font: 650 18px/1.2 var(--serif); }
+    .online-story-list { display: grid; gap: 8px; margin-top: 12px; }
+    .online-story-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 11px; border: 1px solid #e6e6e6; border-radius: 5px; background: #fff; }
+    .online-story-name { min-width: 0; overflow: hidden; font-size: 12px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .online-story-state { color: #777; font-size: 10px; }
+    .story-admin-actions { display: flex; flex: 0 0 auto; gap: 6px; }
+    .story-admin-actions .delete { color: #9b2c2c; }
+    .story-admin-card-actions { display: flex; gap: 6px; }
+    .editor-auth-only[hidden] { display: none !important; }
+    .story-admin-card-actions button { padding: 5px 8px; border: 1px solid #dedede; border-radius: 16px; background: #fff; color: #555; font-size: 10px; cursor: pointer; }
+    .composer-note { line-height: 1.5; }
+    #composer[data-mode="manage"] .composer-title,
+    #composer[data-mode="manage"] .composer-body,
+    #composer[data-mode="manage"] #story-fields,
+    #composer[data-mode="manage"] #draft-library,
+    #composer[data-mode="manage"] .composer-note,
+    #composer[data-mode="manage"] #draft-preview { display: none !important; }
+    #composer[data-mode="preview"] .story-fields { display: none; }
+    @media (max-width: 620px) {
+      .login-dialog { padding: 23px 19px; }
+      .story-fields { grid-template-columns: 1fr; padding: 13px; }
+      .story-fields .full-width { grid-column: auto; }
+      .online-story-row { align-items: flex-start; flex-direction: column; }
+      .story-admin-actions { width: 100%; }
+      .story-admin-actions button { flex: 1; }
+    }
+  </style>
+  <style id="figma-dark-reference">
+    :root {
+      color-scheme: dark;
+      --ink: #f2f2f2;
+      --muted: #a5a5a5;
+      --line: #343434;
+      --soft: #222;
+      --green: #e8c047;
+      --paper: #181818;
+      --accent: #f4c542;
+      --serif: Charter, Georgia, 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    html, body { min-height: 100%; background: #181818; color: var(--ink); }
+    body { font-family: var(--sans); }
+    button, input, textarea, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { color: inherit; }
+    [hidden] { display: none !important; }
+    ::selection { color: #181818; background: #f4c542; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 48px;
+      padding: 0 clamp(14px, calc((100vw - 1200px) / 2), 40px);
+      gap: 12px;
+      border-bottom: 1px solid #2d2d2d;
+      color: #ededed;
+      background: #181818;
+      backdrop-filter: none;
+      justify-content: flex-start;
+    }
+    .menu-toggle, .header-icon {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 31px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: #d5d5d5;
+      background: transparent;
+      cursor: pointer;
+    }
+    .menu-toggle { font-size: 17px; line-height: 1; }
+    .menu-toggle:hover, .header-icon:hover { background: #292929; }
+    .header-icon svg { display: block; width: 16px; height: 16px; }
+    .brand { gap: 0; margin-right: 18px; }
+    .top-actions { margin-left: auto; }
+    .brand-name { color: #f4f4f4; font-size: 23px; letter-spacing: -1.1px; }
+    .top-actions { gap: 16px; color: #c8c8c8; font-size: 12px; }
+    .search-box {
+      width: 178px;
+      height: 30px;
+      padding: 0 11px;
+      border: 1px solid #2a2a2a;
+      border-radius: 18px;
+      color: #a6a6a6;
+      background: #222;
+    }
+    .search-box > svg { width: 15px; height: 15px; stroke: #a1a1a1; }
+    .search-box input { color: #eee; font-size: 12px; }
+    .search-box input::placeholder { color: #999; }
+    .search-box:focus-within { border-color: #525252; background: #242424; }
+    .search-toggle, .search-clear { color: #c7c7c7; }
+    .text-action { color: #d0d0d0; }
+    .text-action:hover { color: #fff; }
+    .write-action { gap: 6px; font-size: 12px; }
+    .write-action svg { width: 15px; height: 15px; }
+    .get-started {
+      min-height: 29px;
+      padding: 7px 12px;
+      border-radius: 18px;
+      color: #1b1b1b;
+      background: #e7e7e7;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .get-started:hover { background: #fff; }
+    .avatar { width: 27px; height: 27px; border: 0; color: #171717; background: #e07eaa; font-size: 11px; }
+    #sync-button { display: none !important; }
+
+    .offerbar {
+      display: flex;
+      min-height: 33px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 5px 12px;
+      color: #222;
+      background: #ffc928;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+    .offer-label {
+      padding: 3px 8px;
+      border-radius: 10px;
+      color: #f5f5f5;
+      background: #262626;
+      font-size: 10px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .offer-message { color: #28230f; }
+    .offer-cta {
+      padding: 2px 0;
+      border: 0;
+      border-bottom: 1px solid currentColor;
+      color: #28230f;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 650;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .drawer-backdrop {
+      position: fixed;
+      z-index: 22;
+      inset: 81px 0 0;
+      width: 100%;
+      height: calc(100dvh - 81px);
+      padding: 0;
+      border: 0;
+      background: rgb(0 0 0 / 66%);
+      cursor: default;
+    }
+    .drawer-backdrop[hidden] { display: none !important; }
+    .layout {
+      width: min(1200px, calc(100% - 44px));
+      grid-template-columns: minmax(0, 1fr) 310px;
+      gap: 40px;
+      align-items: start;
+    }
+    .left-rail {
+      position: fixed;
+      z-index: 23;
+      top: 81px;
+      right: auto;
+      bottom: 0;
+      left: 0;
+      width: min(270px, 82vw);
+      min-height: 0;
+      padding: 19px 15px 22px;
+      overflow: auto;
+      border: 0;
+      border-right: 1px solid #343434;
+      background: #1b1b1b;
+      transform: translateX(-102%);
+      transition: transform .2s ease;
+    }
+    .left-rail.open { transform: translateX(0); }
+    .rail-list { display: grid; gap: 4px; }
+    .rail-link {
+      width: 100%;
+      min-height: 42px;
+      justify-content: flex-start;
+      gap: 13px;
+      padding: 10px 12px;
+      border-radius: 5px;
+      color: #bbb;
+      font-size: 13px;
+    }
+    .rail-link:hover { color: #fff; background: #272727; }
+    .rail-link.active { color: #f3f3f3; background: #292929; }
+    .rail-link span:last-child { display: inline; }
+    .rail-icon, .rail-link.active .rail-icon { color: #c3c3c3; }
+    .rail-icon svg { stroke: currentColor; }
+    .rail-divider { margin: 17px 7px 16px; border-color: #383838; }
+    .rail-label { margin-left: 12px; color: #9b9b9b; }
+    .rail-bottom { position: static; max-width: none; margin: 28px 12px 0; color: #878787; }
+    .rail-bottom a:hover { color: #fff; }
+    main { min-width: 0; padding: 17px 0 74px; }
+    .welcome { display: none; }
+    .tabs { gap: 24px; margin: 0 0 0; border-color: #333; }
+    .tab { padding: 12px 0 11px; color: #9f9f9f; font-size: 12px; }
+    .tab.selected { color: #f2f2f2; font-weight: 600; }
+    .tab.selected::after { height: 2px; background: #f0f0f0; }
+    .story {
+      grid-template-columns: minmax(0, 1fr) 116px;
+      gap: 16px;
+      align-items: start;
+      padding: 17px 0 13px;
+      border-bottom-color: #303030;
+    }
+    .byline { gap: 7px; margin-bottom: 8px; color: #aaa; font-size: 10px; }
+    .mini-avatar { width: 19px; height: 19px; flex: 0 0 auto; font-size: 8px; }
+    .byline strong { color: #e2e2e2; font-weight: 600; }
+    .story h2 { margin-bottom: 4px; color: #f1f1f1; font: 650 17px/1.27 var(--sans); letter-spacing: -.25px; }
+    .story-title-button:hover { color: #fff; }
+    .story-summary { max-width: 440px; color: #b8b8b8; font: 12px/1.4 var(--sans); }
+    .story-image { width: 116px; height: 76px; margin-top: 18px; object-fit: cover; background: #242424; }
+    .story-meta { display: grid; gap: 7px; margin-top: 10px; color: #9b9b9b; font-size: 10px; }
+    .meta-left { gap: 7px; }
+    .topic-pill { padding: 3px 7px; border: 1px solid #3b3b3b; border-radius: 12px; color: #c2c2c2; background: #202020; font-size: 9px; }
+    .meta-dot { color: #797979; }
+    .story-state { color: #efc64a; }
+    .story-state::before { color: #777; }
+    .story-tools { justify-content: flex-start; gap: 13px; width: 100%; padding-top: 6px; border-top: 1px solid #2b2b2b; }
+    .story-preview-action, .bookmark, .more {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: #bcbcbc;
+      background: transparent;
+      cursor: pointer;
+    }
+    .story-preview-action { font-size: 14px; line-height: 1; }
+    .story-preview-action.applause { color: #f1c64a; }
+    .story-preview-action:hover, .bookmark:hover, .more:hover { color: #fff; background: #2a2a2a; }
+    .bookmark { position: relative; font-size: 0; }
+    .bookmark::before { border-color: currentColor; }
+    .bookmark[aria-pressed="true"] { color: #f1c64a; }
+    .bookmark[aria-pressed="true"]::before { border-color: #f1c64a; background: #f1c64a; }
+    .more { color: #bcbcbc; font-size: 14px; letter-spacing: 1px; }
+    .right-rail { display: block; position: sticky; top: 62px; padding-top: 20px; }
+    .write-promo { margin-bottom: 23px; overflow: hidden; border: 1px solid #333; border-radius: 6px; background: #222; }
+    .write-promo > img { display: block; width: 100%; height: 93px; object-fit: cover; object-position: center 52%; filter: brightness(.7); }
+    .write-promo-copy { padding: 12px 13px 14px; }
+    .promo-eyebrow { margin: 0 0 6px; color: #aaa; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .write-promo h2 { margin: 0 0 5px; color: #eee; font: 650 16px/1.3 var(--sans); }
+    .write-promo p:not(.promo-eyebrow) { margin: 0 0 10px; color: #aaa; font-size: 11px; line-height: 1.45; }
+    .write-promo button { padding: 7px 11px; border: 0; border-radius: 17px; color: #191919; background: #e8e8e8; font-size: 10px; cursor: pointer; }
+    .write-promo button:hover { background: #fff; }
+    .side-section { margin-bottom: 24px; }
+    .side-section h2 { margin: 0 0 12px; color: #e6e6e6; font-size: 12px; font-weight: 650; }
+    .topics { gap: 7px; }
+    .topic-button { padding: 7px 10px; border: 1px solid #383838; color: #c2c2c2; background: #202020; font-size: 10px; }
+    .topic-button:hover, .topic-button[aria-pressed="true"] { color: #fff; background: #303030; }
+    .pick { grid-template-columns: 22px 1fr; gap: 7px; margin-bottom: 13px; }
+    .pick-number { color: #a38b45; font-size: 15px; }
+    .pick-byline { margin-bottom: 4px; color: #929292; font-size: 9px; }
+    .pick h3 { color: #e5e5e5; font: 600 11px/1.35 var(--sans); }
+    .see-more { color: #dfbd54; font-size: 10px; }
+    .trending-section { padding-top: 2px; }
+    .follow-suggestion { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; margin: 0 0 11px; }
+    .follow-suggestion > span:nth-child(2) { display: grid; min-width: 0; gap: 3px; }
+    .follow-suggestion strong { overflow: hidden; color: #e4e4e4; font-size: 10px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .follow-suggestion small { overflow: hidden; color: #929292; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+    .follow-suggestion button { min-width: 52px; padding: 5px 8px; border: 1px solid #5a5a5a; border-radius: 15px; color: #ddd; background: transparent; font-size: 9px; cursor: pointer; }
+    .follow-suggestion button[aria-pressed="true"] { border-color: #d6b84e; color: #f1d36d; }
+    .membership-card { padding-top: 17px; border-top-color: #343434; }
+    .membership-card h2 { color: #efefef; font: 600 17px/1.28 var(--sans); }
+    .membership-card p { color: #aaa; font: 11px/1.5 var(--sans); }
+    .membership-card button { border-color: #f0c94e; color: #201b0d; background: #f0c94e; padding: 8px 12px; font-size: 10px; }
+    .membership-card button:hover { background: #ffdb66; }
+    .empty-state { color: #aaa; }
+    .toast { color: #171717; background: #f1ca52; box-shadow: 0 6px 24px #0008; }
+
+    .stats-heading h1 { color: #f3f3f3; }
+    .stats-heading p:last-child, .stats-footnote { color: #a9a9a9; }
+    .stats-scope-note { border-color: #363636; color: #b7b7b7; background: #202020; }
+    .stats-card { border-color: #353535; background: #202020; }
+    .stats-card dt, .stats-card p { color: #aaa; }
+    .stats-card dd { color: #f1f1f1; }
+
+    .reader {
+      position: fixed;
+      inset: 81px 0 0;
+      display: flex;
+      flex-direction: column;
+      width: min(960px, 100vw);
+      height: calc(100dvh - 81px);
+      max-width: none;
+      max-height: none;
+      margin: 0 auto;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid #303030;
+      border-bottom: 0;
+      border-radius: 0;
+      color: #f2f2f2;
+      background: #181818;
+      box-shadow: 0 12px 50px #0008;
+    }
+    .reader:not([open]) { display: none; }
+    .reader::backdrop { background: transparent; backdrop-filter: none; }
+    .reader-toolbar { flex: 0 0 auto; min-height: 45px; padding: 0 18px; border-color: #333; color: #aaa; background: #181818; font-size: 11px; }
+    .reader-close { color: #d4d4d4; }
+    .reader-close:hover { color: #fff; }
+    .reader-progress { flex: 0 0 2px; background: #292929; }
+    .reader-progress span { background: #f0c544; }
+    .reader-scroll { flex: 1 1 auto; min-height: 0; max-height: none; padding: clamp(25px, 4.5vw, 48px) clamp(23px, 9vw, 104px) 42px; background: #181818; }
+    .reader-article { max-width: 690px; margin: 0 auto; }
+    .reader-kicker { margin-bottom: 12px; color: #e4c253; font-size: 11px; }
+    .reader-title { margin-bottom: 17px; color: #f7f7f7; font: 700 clamp(32px, 4.2vw, 48px)/1.08 var(--sans); letter-spacing: -1.5px; }
+    .reader-byline-row { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+    .reader-author-avatar { display: grid; flex: 0 0 31px; place-items: center; width: 31px; height: 31px; border-radius: 50%; color: #191919; background: #dc83a7; font-size: 9px; font-weight: 700; }
+    .reader-byline { flex: 1 1 auto; min-width: 0; margin: 0; color: #aaa; font-size: 11px; line-height: 1.4; }
+    .reader-byline-follow { min-height: 29px; flex: 0 0 auto; padding: 5px 10px; border: 1px solid #555; border-radius: 18px; color: #ddd; background: transparent; font-size: 10px; white-space: nowrap; }
+    .reader-byline-follow:hover { border-color: #aaa; background: #242424; }
+    .reader-story-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 24px; padding: 7px 0; border-top: 1px solid #303030; border-bottom: 1px solid #303030; }
+    .reader-story-toolbar-group { display: flex; align-items: center; gap: 5px; }
+    .reader-story-toolbar .story-preview-action { width: 26px; height: 26px; }
+    .reader-story-toolbar .applause { color: #f1c64a; }
+    .reader-story-toolbar .responses, .reader-story-toolbar .repost { color: #c3c3c3; }
+    .reader-story-toolbar #reader-quick-bookmark[aria-pressed="true"] { color: #f1c64a; }
+    .reader-body { max-width: 650px; color: #e0e0e0; font: 18px/1.78 var(--serif); }
+    .reader-body p { margin-bottom: 22px; }
+    .reader-actions { flex: 0 0 auto; flex-wrap: wrap; padding: 10px 17px; border-color: #333; background: #1b1b1b; }
+    .reader-actions-group { gap: 7px; }
+    .reader-action { min-height: 38px; padding: 8px 12px; border-color: #414141; color: #ddd; background: #222; font-size: 11px; }
+    .reader-action:hover { background: #2a2a2a; }
+    .reader-action.primary { border-color: #f0c645; color: #201b0d; background: #f0c645; }
+    .reader-action.primary:hover { background: #ffda69; }
+    .reader-action[aria-pressed="true"] { border-color: #c3a23e; color: #f2d365; }
+    .reader-action.primary[aria-pressed="true"] { border-color: #f0c645; color: #201b0d; background: #f0c645; }
+
+    .composer, .login-dialog { border-color: #3a3a3a; color: #ededed; background: #1b1b1b; box-shadow: 0 18px 70px #0009; }
+    .composer::backdrop, .login-dialog::backdrop { background: rgb(0 0 0 / 72%); backdrop-filter: blur(2px); }
+    .composer-toolbar { border-color: #383838; background: #1b1b1b; }
+    .composer-status, .composer-note, .draft-date, .draft-library-heading p { color: #999; }
+    .composer-button, .draft-row-actions button, .draft-rename-form button, .story-admin-actions button { border-color: #454545; color: #ddd; background: #252525; }
+    .composer-button:hover, .draft-row-actions button:hover, .draft-rename-form button:hover, .story-admin-actions button:hover { background: #303030; }
+    .composer-button.primary, .draft-rename-form .draft-rename-save { border-color: #f0c645; color: #211b0d; background: #f0c645; }
+    .composer-content { color: #eee; }
+    .composer-title, .composer-preview-title { color: #f5f5f5; }
+    .composer-title::placeholder, .composer-body::placeholder { color: #777; }
+    .composer-body, .composer-preview-body { color: #e1e1e1; }
+    .draft-library, .online-library, .story-fields { border-color: #383838; background: #222; }
+    .draft-row, .online-story-row { border-color: #3b3b3b; background: #1b1b1b; }
+    .draft-name, .online-story-name, .online-library-heading h3, .draft-library-heading h3 { color: #eee; }
+    .draft-rename-form input, .login-dialog input, .story-fields input, .story-fields select { border-color: #454545; color: #eee; background: #242424; }
+    .login-dialog h2 { color: #f4f4f4; }
+    .login-dialog p, .login-dialog label, .story-fields label { color: #b4b4b4; }
+    .login-actions button, .story-admin-actions button { border-color: #484848; color: #ddd; background: #252525; }
+    .login-actions .primary { border-color: #f0c645; color: #211b0d; background: #f0c645; }
+    .story-admin-card-actions button { border-color: #454545; color: #ddd; background: #242424; }
+
+    @media (max-width: 1120px) {
+      .layout { width: min(100% - 36px, 1000px); grid-template-columns: minmax(0, 1.75fr) minmax(190px, .95fr); gap: 20px; }
+      .right-rail { display: block; }
+      .left-rail { width: min(172px, 82vw); }
+      .story { grid-template-columns: minmax(0, 1fr) 108px; gap: 13px; }
+      .story-image { width: 108px; height: 74px; }
+    }
+    @media (max-width: 900px) {
+      .layout { width: min(100% - 36px, 760px); grid-template-columns: minmax(0, 1.75fr) minmax(190px, .95fr); gap: 20px; }
+      .left-rail { padding: 19px 15px 22px; }
+      .rail-link { width: 100%; justify-content: flex-start; padding: 10px 12px; }
+      .rail-link span:last-child, .rail-label, .rail-divider, .rail-bottom { display: block; }
+      .right-rail { display: block; }
+      main { padding-top: 17px; }
+    }
+    @media (max-width: 620px) {
+      .topbar { height: 48px; padding: 0 11px; gap: 7px; }
+      .menu-toggle { width: 28px; }
+      .brand-name { font-size: 21px; }
+      .top-actions { gap: 7px; }
+      .search-box { width: 32px; height: 34px; padding: 0; justify-content: center; border-color: transparent; background: transparent; }
+      .search-box > svg, .search-box input { display: none; }
+      .search-toggle { display: grid; width: 32px; height: 32px; place-items: center; }
+      .search-toggle svg { display: block; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+      .search-box.is-open { position: absolute; left: 49px; right: 8px; z-index: 2; width: auto; justify-content: flex-start; padding: 0 8px; border-color: #424242; background: #232323; box-shadow: 0 2px 9px #0008; }
+      .search-box.is-open > svg { display: block; }
+      .search-box.is-open input { display: block; }
+      .search-box.is-open .search-toggle { display: none; }
+      .search-box.is-open .search-clear { display: grid; place-items: center; color: #ddd; }
+      .get-started, #editor-login-button { display: none; }
+      .write-action { display: inline-flex; width: 30px; height: 32px; justify-content: center; padding: 0; }
+      .write-action span { display: none; }
+      .header-icon { width: 28px; height: 32px; }
+      .avatar { display: grid; width: 25px; height: 25px; }
+      .offerbar { min-height: 32px; gap: 6px; padding: 4px 7px; font-size: 9px; }
+      .offer-label { padding: 3px 6px; font-size: 8px; }
+      .offer-message { font-size: 9px; }
+      .offer-cta { font-size: 9px; }
+      .drawer-backdrop { inset-block-start: 80px; height: calc(100dvh - 80px); }
+      .layout { display: block; width: 100%; }
+      .left-rail { top: 80px; width: min(278px, 82vw); padding: 18px 14px 22px; }
+      .right-rail { display: none; }
+      main { padding: 13px 16px 48px; }
+      .tabs { gap: 21px; }
+      .tab { padding: 11px 0 10px; }
+      .story { grid-template-columns: minmax(0, 1fr) 82px; gap: 9px; padding: 16px 0 12px; }
+      .byline { gap: 6px; font-size: 9px; }
+      .mini-avatar { width: 18px; height: 18px; }
+      .story h2 { font-size: 15px; line-height: 1.3; }
+      .story-summary { font-size: 11px; line-height: 1.38; -webkit-line-clamp: 2; }
+      .story-image { width: 82px; height: 67px; margin-top: 17px; }
+      .story-meta { gap: 6px; margin-top: 9px; font-size: 9px; }
+      .meta-left { gap: 5px; }
+      .topic-pill { display: none; }
+      .story-tools { gap: 10px; padding-top: 5px; }
+      .story-preview-action, .bookmark, .more { width: 26px; height: 26px; }
+      .reader { inset: 80px 0 0; width: 100vw; height: calc(100dvh - 80px); border-right: 0; border-left: 0; box-shadow: none; }
+      .reader-toolbar { min-height: 43px; padding: 0 14px; }
+      .reader-scroll { padding: 23px 19px 32px; }
+      .reader-title { font-size: 31px; letter-spacing: -.9px; }
+      .reader-byline-row { gap: 7px; margin-bottom: 12px; }
+      .reader-author-avatar { flex-basis: 28px; width: 28px; height: 28px; }
+      .reader-byline { font-size: 10px; }
+      .reader-byline-follow { max-width: 90px; min-height: 30px; padding: 5px 7px; font-size: 9px; }
+      .reader-story-toolbar { gap: 4px; margin-bottom: 18px; }
+      .reader-story-toolbar-group { gap: 2px; }
+      .reader-story-toolbar .story-preview-action { width: 25px; height: 25px; }
+      .reader-body { font-size: 17px; line-height: 1.72; }
+      .reader-actions { gap: 8px; padding: 8px 9px max(8px, env(safe-area-inset-bottom)); }
+      .reader-actions-group { flex: 1 1 220px; gap: 4px; }
+      .reader-action { min-height: 40px; padding: 8px 9px; font-size: 10px; }
+      .reader-action.primary { width: 100px; min-width: 100px; min-height: 44px; height: auto; align-self: center; flex: 0 0 auto; padding: 6px 8px; line-height: 1.2; white-space: normal; }
+      .composer { width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; border-radius: 0; }
+      .composer-toolbar { padding: 0 9px; }
+      .composer-content { padding: 38px 20px 28px; }
+      .login-dialog { padding: 23px 19px; }
+      .story-fields { grid-template-columns: 1fr; padding: 13px; }
+      .story-fields .full-width { grid-column: auto; }
+      .online-story-row { align-items: flex-start; flex-direction: column; }
+      .story-admin-actions { width: 100%; }
+      .story-admin-actions button { flex: 1; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stats-card { padding: 14px 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+    .layout[hidden], .membership-view[hidden] { display: none !important; }
+    .membership-active .menu-toggle, .membership-active .top-actions { display: none !important; }
+    .membership-view { width: 100%; color: #f4f2ef; background: #181818; }
+    .membership-hero { display: grid; grid-template-columns: minmax(0, .84fr) minmax(0, 1.16fr); min-height: 520px; }
+    .membership-intro { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; min-width: 0; padding: clamp(30px, 5vw, 72px); color: #181614; background: #faf3eb; }
+    .membership-kicker, .membership-section-eyebrow { margin: 0; color: #77695f; font-size: 10px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
+    .membership-intro-copy { max-width: 560px; }
+    .membership-title { max-width: 12ch; margin: 0 0 22px; color: #171513; font: 400 clamp(38px, 5.6vw, 64px)/1.02 var(--serif); letter-spacing: -1.7px; }
+    .membership-lead { max-width: 440px; margin: 0; color: #655d57; font-size: 15px; line-height: 1.55; }
+    .membership-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .membership-button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; padding: 9px 16px; border: 1px solid #222; border-radius: 22px; color: #f8f8f8; background: #1c1c1c; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; }
+    .membership-button:hover { background: #333; }
+    .membership-button.secondary { color: #201d1b; background: transparent; }
+    .membership-button.secondary:hover { background: rgb(0 0 0 / 5%); }
+    .membership-feature-card { display: flex; min-width: 0; flex-direction: column; color: #1e171b; background: #f0d8e6; }
+    .membership-feature-media { position: relative; height: clamp(250px, 32vw, 390px); min-height: 220px; overflow: hidden; background: #d8c7cb; }
+    .membership-feature-media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 48%; filter: saturate(.88) brightness(.88); }
+    .membership-feature-label { position: absolute; bottom: 16px; left: 22px; padding: 6px 11px; border-radius: 17px; color: #241d0f; background: #f2c849; font-size: 10px; font-weight: 650; }
+    .membership-feature-copy { display: grid; flex: 1 1 auto; align-content: start; gap: 11px; padding: clamp(17px, 2.5vw, 29px); }
+    .membership-feature-eyebrow { margin: 0; color: #75636a; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .membership-feature-title { max-width: 15ch; margin: 0; color: #1b1718; font: 400 clamp(25px, 3.25vw, 42px)/1.08 var(--serif); letter-spacing: -.6px; }
+    .membership-feature-byline { display: flex; align-items: center; gap: 9px; margin: 2px 0 0; color: #51484b; font-size: 11px; line-height: 1.45; }
+    .membership-author-avatar { display: grid; flex: 0 0 29px; place-items: center; width: 29px; height: 29px; border-radius: 50%; color: #21191c; background: #df9cba; font-size: 9px; font-weight: 700; }
+    .membership-read-story { display: inline-flex; width: fit-content; align-items: center; gap: 7px; padding: 2px 0; border: 0; color: #30252a; background: transparent; font-size: 11px; font-weight: 650; cursor: pointer; }
+    .membership-read-story:hover { text-decoration: underline; }
+    .membership-benefits { padding: 64px clamp(22px, 4vw, 54px) 80px; color: #f3f3f3; background: #181818; }
+    .membership-benefits-inner { width: min(850px, 100%); margin: 0 auto 0 0; }
+    .membership-section-eyebrow { margin-bottom: 12px; color: #d1b956; }
+    .membership-benefits-title { max-width: 8ch; margin: 0; color: #f5f5f5; font: 400 clamp(48px, 6vw, 76px)/1.02 var(--serif); letter-spacing: -1.8px; }
+    .membership-benefit-list { display: grid; gap: 66px; margin-top: 46px; }
+    .membership-benefit h3 { margin: 0 0 10px; color: #f5f5f5; font: 400 clamp(27px, 3.2vw, 39px)/1.12 var(--serif); letter-spacing: -.45px; }
+    .membership-benefit p { max-width: 660px; margin: 0; color: #d0d0d0; font-size: 14px; line-height: 1.68; }
+    .membership-return { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; margin-top: 82px; padding-top: 21px; border-top: 1px solid #363636; }
+    .membership-disclaimer { max-width: 570px; margin: 0; color: #969696; font-size: 11px; line-height: 1.5; }
+    .membership-return .membership-button.secondary { border-color: #686868; color: #eee; }
+    .membership-return .membership-button.secondary:hover { background: #262626; }
+    #membership-benefits { scroll-margin-top: 20px; }
+    @media (max-width: 900px) {
+      .membership-hero { min-height: 450px; }
+      .membership-title { font-size: clamp(34px, 5vw, 52px); }
+      .membership-feature-media { height: 270px; }
+      .membership-benefit-list { gap: 54px; }
+    }
+    @media (max-width: 620px) {
+      .membership-hero { grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); min-height: 220px; }
+      .membership-intro { gap: 10px; padding: 14px 10px; }
+      .membership-kicker { font-size: 7px; letter-spacing: .08em; }
+      .membership-intro-copy { margin-block: auto; }
+      .membership-title { max-width: 100%; margin-bottom: 8px; font-size: 20px; letter-spacing: -.75px; line-height: 1.05; }
+      .membership-lead { font-size: 9px; line-height: 1.35; }
+      .membership-actions { flex-wrap: nowrap; gap: 4px; }
+      .membership-button { min-height: 30px; padding: 5px 6px; font-size: 8px; white-space: nowrap; }
+      .membership-feature-media { height: 102px; min-height: 102px; }
+      .membership-feature-label { bottom: 8px; left: 9px; padding: 4px 7px; font-size: 8px; }
+      .membership-feature-copy { gap: 5px; padding: 8px 8px 9px; }
+      .membership-feature-eyebrow { font-size: 7px; }
+      .membership-feature-title { font-size: 14px; letter-spacing: -.2px; }
+      .membership-feature-byline { gap: 6px; font-size: 8px; }
+      .membership-author-avatar { flex-basis: 20px; width: 20px; height: 20px; font-size: 7px; }
+      .membership-read-story { font-size: 8px; }
+      .membership-benefits { padding: 38px 19px 53px; }
+      .membership-section-eyebrow { margin-bottom: 10px; font-size: 8px; }
+      .membership-benefits-title { font-size: 39px; letter-spacing: -1.1px; }
+      .membership-benefit-list { gap: 46px; margin-top: 33px; }
+      .membership-benefit h3 { margin-bottom: 8px; font-size: 27px; }
+      .membership-benefit p { font-size: 12px; line-height: 1.62; }
+      .membership-return { align-items: flex-start; flex-direction: column; gap: 14px; margin-top: 52px; }
+      .membership-disclaimer { font-size: 10px; }
+    }
+    @media (max-width: 360px) {
+      .membership-hero { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+      .membership-intro { padding-inline: 8px; }
+      .membership-title { font-size: 18px; }
+      .membership-actions { gap: 3px; }
+    }
+  </style>
+</head>
+<body>
+<header class="topbar">
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation" aria-controls="main-navigation" aria-expanded="false"><span aria-hidden="true">☰</span></button>
+    <a class="brand" href="#home" aria-label="Medium home"><span class="brand-name">Medium</span></a>
+    <div class="top-actions">
+      <div class="search-box" aria-label="Search stories"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m15.5 15.5 4.2 4.2"></path></svg><input id="search" type="search" placeholder="Search" autocomplete="off" aria-label="Search stories" /><button class="search-toggle" id="search-toggle" type="button" aria-label="Open search" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m15.5 15.5 4.2 4.2"></path></svg></button><button class="search-clear" id="search-clear" type="button" aria-label="Clear search">×</button></div>
+      <button class="text-action write-action" id="write-button" type="button" aria-label="Write" aria-haspopup="dialog" aria-controls="composer"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m14.8 5.2 4 4L8 20H4v-4z"></path><path d="m12.9 7.1 4 4"></path></svg><span>Write</span></button>
+      <button class="header-icon" id="notifications-button" type="button" aria-label="Notifications" data-toast="Notifications are a visual preview in this sample."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></button>
+      <button class="text-action sync-action" id="sync-button" type="button" title="Manually merge this device’s reading data with your private account" aria-label="Sync reading data">Sync</button>
+      <button class="text-action" id="editor-login-button" type="button">Sign in</button>
+      <button class="get-started" type="button" data-membership-route>Get started</button>
+      <span class="avatar" aria-label="Reader profile">R</span>
+    </div>
+  </header>
+
+  <section class="offerbar" aria-label="Membership preview">
+    <span class="offer-label">Welcome offer</span>
+    <span class="offer-message">A little more room for good stories.</span>
+    <button class="offer-cta" type="button" data-membership-route>Upgrade</button>
+  </section>
+  <button class="drawer-backdrop" id="drawer-backdrop" type="button" aria-label="Close navigation" hidden></button>
+
+  <div class="layout" id="home">
+    <aside class="left-rail" id="main-navigation" aria-label="Main navigation" inert>
+      <nav class="rail-list">
+        <button class="rail-link active" data-view="For you" aria-current="page"><span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3.5 10.5 8.5-7 8.5 7"></path><path d="M5.5 9.4v10.1h13V9.4"></path><path d="M9.5 19.5v-6h5v6"></path></svg></span><span>Home</span></button>
+        <button class="rail-link" data-view="Following"><span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.6-3.4 2.4-5.2 5.5-5.2s4.9 1.8 5.5 5.2"></path><path d="M16 5.8a3 3 0 0 1 0 5.8M16.3 15c2.3.6 3.7 2.2 4.2 4.8"></path></svg></span><span>Following</span></button>
+        <button class="rail-link" data-view="Bookmarks"><span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4.5h12v16l-6-4-6 4z"></path></svg></span><span>Library</span></button>
+        <hr class="rail-divider" />
+        <p class="rail-label">Your space</p>
+        <button class="rail-link" id="manage-stories-button"><span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14.7 5.3 4 4L8 20H4v-4z"></path><path d="m12.8 7.2 4 4"></path></svg></span><span>Stories</span></button>
+        <button class="rail-link" data-view="Stats" aria-label="Stats"><span class="rail-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5h16"></path><path d="M6.5 17V11M12 17V5M17.5 17V8"></path></svg></span><span>Stats</span></button>
+      </nav>
+      <div class="rail-bottom"><a href="#about">About</a><a href="#help">Help</a><a href="#terms">Terms</a><br />Made for curious readers.</div>
+    </aside>
+
+    <main>
+      <div class="feed-view" id="feed-view">
+      <section class="welcome" aria-labelledby="welcome-title">
+        <p class="eyebrow">Home</p>
+        <h1 id="welcome-title">For you</h1>
+        <p>Stories and ideas picked for your next great read.</p>
+      </section>
+      <div class="tabs" role="tablist" aria-label="Story feed">
+        <button class="tab selected" role="tab" aria-selected="true" data-view="For you">For you</button>
+        <button class="tab" role="tab" aria-label="Following" aria-selected="false" data-view="Following">Activity</button>
+      </div>
+      <section id="stories" aria-label="Recommended stories">
+        <article class="story" data-author="Mara Ellis" data-topics="Creativity Writing Mindfulness">
+          <div class="story-copy">
+            <div class="byline"><span class="mini-avatar">ME</span><span><strong>Mara Ellis</strong> in The Open Notebook</span></div>
+            <h2>The quiet craft of paying attention</h2>
+            <p class="story-summary">A small daily walk changed the way I write, work, and notice the life already happening around me.</p>
+            <div class="story-meta"><div class="meta-left"><span>May 12</span><span class="meta-dot">·</span><span>6 min read</span><span class="topic-pill">Creativity</span></div><div class="story-tools"><button class="bookmark" aria-label="Save The quiet craft of paying attention" aria-pressed="false">♧</button><button class="more" aria-label="More options">···</button></div></div>
+          </div>
+          <img class="story-image" src="assets/writing-garden.jpg" alt="A writer making notes in a garden" />
+        </article>
+        <article class="story" data-author="Theo Park" data-topics="Technology Design">
+          <div class="story-copy">
+            <div class="byline"><span class="mini-avatar blue">TP</span><span><strong>Theo Park</strong> in Small Systems</span></div>
+            <h2>Make your tools a little less impressive</h2>
+            <p class="story-summary">The best productivity setup I’ve tried is the one that asks the fewest questions of me.</p>
+            <div class="story-meta"><div class="meta-left"><span>May 11</span><span class="meta-dot">·</span><span>4 min read</span><span class="topic-pill">Technology</span></div><div class="story-tools"><button class="bookmark" aria-label="Save Make your tools a little less impressive" aria-pressed="false">♧</button><button class="more" aria-label="More options">···</button></div></div>
+          </div>
+          <img class="story-image" src="assets/notebook.jpg" alt="An open notebook resting outdoors" />
+        </article>
+        <article class="story" data-author="Juniper Wells" data-topics="Travel Life">
+          <div class="story-copy">
+            <div class="byline"><span class="mini-avatar pink">JW</span><span><strong>Juniper Wells</strong> in Elsewhere, Slowly</span></div>
+            <h2>What I learned from missing my train</h2>
+            <p class="story-summary">I thought the trip was about getting there. A quiet hour by the window changed the itinerary.</p>
+            <div class="story-meta"><div class="meta-left"><span>May 10</span><span class="meta-dot">·</span><span>8 min read</span><span class="topic-pill">Travel</span></div><div class="story-tools"><button class="bookmark" aria-label="Save What I learned from missing my train" aria-pressed="false">♧</button><button class="more" aria-label="More options">···</button></div></div>
+          </div>
+          <img class="story-image" src="assets/train-journal.jpeg" alt="A traveler writing in a journal by a train window" />
+        </article>
+        <article class="story" data-author="Ari Bennett" data-topics="Life Mindfulness">
+          <div class="story-copy">
+            <div class="byline"><span class="mini-avatar green">AB</span><span><strong>Ari Bennett</strong> in Good Enough Days</span></div>
+            <h2>There is no perfect time to begin again</h2>
+            <p class="story-summary">A practical note on starting small, especially when the calendar is already full.</p>
+            <div class="story-meta"><div class="meta-left"><span>May 9</span><span class="meta-dot">·</span><span>5 min read</span><span class="topic-pill">Life</span></div><div class="story-tools"><button class="bookmark" aria-label="Save There is no perfect time to begin again" aria-pressed="false">♧</button><button class="more" aria-label="More options">···</button></div></div>
+          </div>
+          <img class="story-image" src="assets/river-sunset.jpg" alt="A pink sunset reflected on a quiet river" />
+        </article>
+        <article class="story" data-author="Nadia Flores" data-topics="Health Mindfulness">
+          <div class="story-copy">
+            <div class="byline"><span class="mini-avatar gold">NF</span><span><strong>Nadia Flores</strong> in The Daily Practice</span></div>
+            <h2>Rest is not a reward for finishing</h2>
+            <p class="story-summary">We made a checklist out of being human. Here’s what happened when I stopped treating rest as the last item.</p>
+            <div class="story-meta"><div class="meta-left"><span>May 8</span><span class="meta-dot">·</span><span>7 min read</span><span class="topic-pill">Health</span></div><div class="story-tools"><button class="bookmark" aria-label="Save Rest is not a reward for finishing" aria-pressed="false">♧</button><button class="more" aria-label="More options">···</button></div></div>
+          </div>
+          <img class="story-image" src="assets/forest-wellness.jpg" alt="People practicing a quiet ritual in a green forest" />
+        </article>
+        <article class="story" data-author="Sam Rivera" data-topics="Culture Cities">
+          <div class="story-copy">
+            <div class="byline"><span class="mini-avatar blue">SR</span><span><strong>Sam Rivera</strong> in City Notes</span></div>
+            <h2>The city looks different when you walk home</h2>
+            <p class="story-summary">A familiar neighborhood can still surprise you; it just needs a slower pace and a little room to wander.</p>
+            <div class="story-meta"><div class="meta-left"><span>May 7</span><span class="meta-dot">·</span><span>5 min read</span><span class="topic-pill">Culture</span></div><div class="story-tools"><button class="bookmark" aria-label="Save The city looks different when you walk home" aria-pressed="false">♧</button><button class="more" aria-label="More options">···</button></div></div>
+          </div>
+          <img class="story-image" src="assets/city-scenes.jpg" alt="A collage of street scenes and city landmarks" />
+        </article>
+      </section>
+      <p class="empty-state" id="empty-state">No stories match that yet. Try another search.</p>
+      </div>
+      <section class="stats-view" id="stats-view" aria-labelledby="stats-title" hidden>
+        <div class="stats-heading">
+          <h1 id="stats-title">Reading stats</h1>
+          <p>A small snapshot of progress across the sample stories.</p>
+        </div>
+        <p class="stats-scope-note">These totals use stories available on this page and reading progress saved in this browser. The page does not track time spent reading.</p>
+        <dl class="stats-grid" aria-label="Local reading activity">
+          <div class="stats-card"><dt>Saved stories</dt><dd id="stats-saved">0</dd><p>In your reading list</p></div>
+          <div class="stats-card"><dt>Finished stories</dt><dd id="stats-finished">0</dd><p>Marked as finished in the reader</p></div>
+          <div class="stats-card"><dt>In progress</dt><dd id="stats-in-progress">0</dd><p>Opened and not marked finished</p></div>
+          <div class="stats-card"><dt>Estimated minutes</dt><dd id="stats-minutes">0</dd><p>Listed read-time estimates for finished stories</p></div>
+        </dl>
+        <p class="stats-footnote">Estimated minutes add published read-time labels. They are not a measure of actual reading time.</p>
+      </section>
+    </main>
+
+    <aside class="right-rail" aria-label="Explore Medium">
+      <section class="write-promo" aria-labelledby="write-promo-title">
+        <img src="assets/notebook.jpg" alt="" />
+        <div class="write-promo-copy">
+          <p class="promo-eyebrow">Your next page</p>
+          <h2 id="write-promo-title">Just start writing</h2>
+          <p>Draft and revise a story in the private site editor.</p>
+          <button id="right-write-button" type="button">Open the writer</button>
+        </div>
+      </section>
+      <section class="side-section">
+        <h2>Staff picks</h2>
+        <article class="pick"><span class="pick-number">01</span><div><p class="pick-byline">A Field Guide · 8 min read</p><h3>On keeping a notebook you never show anyone</h3></div></article>
+        <article class="pick"><span class="pick-number">02</span><div><p class="pick-byline">Civic Life · 6 min read</p><h3>How a block becomes a neighborhood</h3></div></article>
+        <article class="pick"><span class="pick-number">03</span><div><p class="pick-byline">New Rhythm · 5 min read</p><h3>A kinder way to make a plan</h3></div></article>
+        <a class="see-more" href="#stories">See the full list</a>
+      </section>
+      <section class="side-section trending-section">
+        <h2>Trending in your feed</h2>
+        <article class="pick"><span class="pick-number">01</span><div><p class="pick-byline">Mara Ellis · 6 min read</p><h3>The quiet craft of paying attention</h3></div></article>
+        <article class="pick"><span class="pick-number">02</span><div><p class="pick-byline">Theo Park · 4 min read</p><h3>Make your tools a little less impressive</h3></div></article>
+        <article class="pick"><span class="pick-number">03</span><div><p class="pick-byline">Juniper Wells · 8 min read</p><h3>What I learned from missing my train</h3></div></article>
+      </section>
+      <section class="side-section">
+        <h2>Recommended topics</h2>
+        <div class="topics">
+          <button class="topic-button" data-topic="Technology">Technology</button>
+          <button class="topic-button" data-topic="Creativity">Creativity</button>
+          <button class="topic-button" data-topic="Life">Life</button>
+          <button class="topic-button" data-topic="Writing">Writing</button>
+          <button class="topic-button" data-topic="Travel">Travel</button>
+          <button class="topic-button" data-topic="Mindfulness">Mindfulness</button>
+        </div>
+      </section>
+      <section class="side-section who-to-follow">
+        <h2>Writers you may like</h2>
+        <div class="follow-suggestion"><span class="mini-avatar">ME</span><span><strong>Mara Ellis</strong><small>Notes on attention and creativity</small></span><button type="button" data-follow-author="Mara Ellis" aria-pressed="false">Follow</button></div>
+        <div class="follow-suggestion"><span class="mini-avatar blue">TP</span><span><strong>Theo Park</strong><small>Small tools, thoughtful work</small></span><button type="button" data-follow-author="Theo Park" aria-pressed="false">Follow</button></div>
+        <div class="follow-suggestion"><span class="mini-avatar green">AB</span><span><strong>Ari Bennett</strong><small>Making room for ordinary days</small></span><button type="button" data-follow-author="Ari Bennett" aria-pressed="false">Follow</button></div>
+      </section>
+      <section class="membership-card">
+        <h2>Keep good stories close.</h2>
+        <p>This membership card is a design preview; reading and saving stories here stays free.</p>
+        <button type="button" data-membership-route>Explore membership</button>
+      </section>
+    </aside>
+  </div>
+  <section class="membership-view" id="membership-view" aria-labelledby="membership-title" hidden>
+    <div class="membership-hero">
+      <div class="membership-intro">
+        <p class="membership-kicker">A reading room for curious minds</p>
+        <div class="membership-intro-copy">
+          <h1 class="membership-title" id="membership-title">Read with wonder.</h1>
+          <p class="membership-lead">Find thoughtful voices, follow fresh ideas, and keep the stories you love close.</p>
+        </div>
+        <div class="membership-actions">
+          <button class="membership-button" id="membership-benefits-button" type="button" aria-label="See the benefits">Benefits</button>
+          <button class="membership-button secondary" id="membership-back-home" type="button" aria-label="Back to Home">Home</button>
+        </div>
+      </div>
+      <article class="membership-feature-card" aria-labelledby="membership-feature-title">
+        <div class="membership-feature-media">
+          <img src="assets/writing-garden.jpg" alt="A writer making notes during a quiet walk in a garden" />
+          <span class="membership-feature-label">Featured story</span>
+        </div>
+        <div class="membership-feature-copy">
+          <p class="membership-feature-eyebrow">The Open Notebook · Creativity</p>
+          <h2 class="membership-feature-title" id="membership-feature-title">The quiet craft of paying attention</h2>
+          <p class="membership-feature-byline"><span class="membership-author-avatar" aria-hidden="true">ME</span><span>Mara Ellis<br /><span>Small observations, held a little longer.</span></span></p>
+          <button class="membership-read-story" id="membership-read-story" type="button">Read this story <span aria-hidden="true">→</span></button>
+        </div>
+      </article>
+    </div>
+    <section class="membership-benefits" id="membership-benefits" aria-labelledby="membership-why-title">
+      <div class="membership-benefits-inner">
+        <p class="membership-section-eyebrow">A little more room for good stories</p>
+        <h2 class="membership-benefits-title" id="membership-why-title">Why membership?</h2>
+        <div class="membership-benefit-list">
+          <article class="membership-benefit">
+            <h3>Reward writers</h3>
+            <p>Give your attention to independent voices. Follow authors whose ideas stay with you, then return to the pieces that deserve a second read.</p>
+          </article>
+          <article class="membership-benefit">
+            <h3>Unlock every story</h3>
+            <p>Keep essays, field notes, and practical ideas together in a reading space that makes the next interesting thing easier to find.</p>
+          </article>
+          <article class="membership-benefit">
+            <h3>Enhance your reading experience</h3>
+            <p>Save stories for later, follow the writers you enjoy, and pick up where you left off in this local reading room.</p>
+          </article>
+          <article class="membership-benefit">
+            <h3>Elevate your writing</h3>
+            <p>Use the private editor to sketch an idea, preview a story, and revise at your own pace.</p>
+          </article>
+        </div>
+        <div class="membership-return">
+          <p class="membership-disclaimer">Local design preview only. No membership is purchased and no payment or subscription is started from this page.</p>
+          <button class="membership-button secondary" id="membership-return-home" type="button">Return to Home</button>
+        </div>
+      </div>
+    </section>
+  </section>
+  <dialog class="composer" id="composer" aria-labelledby="composer-label" data-mode="write">
+    <div class="composer-toolbar">
+      <span class="composer-status" id="draft-status" role="status" aria-live="polite">Your draft stays in this browser</span>
+      <div class="composer-toolbar-actions">
+        <button class="composer-button" id="draft-library-toggle" type="button" aria-expanded="false" aria-controls="draft-library">Drafts <span id="draft-count">0</span></button>
+        <button class="composer-button editor-auth-only" id="online-library-toggle" type="button" aria-expanded="false" aria-controls="online-library" hidden>Online stories</button>
+        <button class="composer-button" id="preview-toggle" type="button" aria-pressed="false">Preview</button>
+        <button class="composer-button primary" id="save-draft" type="button">Save draft</button>
+        <button class="composer-button primary editor-auth-only" id="publish-online" type="button" hidden>Publish online</button>
+        <button class="composer-close" id="close-composer" type="button" aria-label="Close writer">×</button>
+      </div>
+    </div>
+    <div class="composer-content">
+      <h2 class="visually-hidden" id="composer-label">Write a story</h2>
+      <section class="draft-library" id="draft-library" aria-label="Saved drafts" hidden>
+        <div class="draft-library-heading">
+          <div><h3>Your drafts</h3><p>Saved only in this browser on this device.</p></div>
+          <button class="composer-button primary" id="new-draft" type="button">New draft</button>
+        </div>
+        <div class="draft-list" id="draft-list" aria-live="polite"></div>
+      </section>
+      <section class="online-library" id="online-library" aria-label="Online stories" hidden>
+        <div class="online-library-heading"><h3>Online stories</h3><span class="composer-status" id="online-story-count"></span></div>
+        <div class="online-story-list" id="online-story-list" aria-live="polite"></div>
+      </section>
+      <label class="visually-hidden" for="draft-title">Story title</label>
+      <input class="composer-title" id="draft-title" type="text" maxlength="120" placeholder="Title" autocomplete="off" />
+      <label class="visually-hidden" for="draft-body">Story body</label>
+      <textarea class="composer-body" id="draft-body" placeholder="Tell your story..." spellcheck="true"></textarea>
+      <section class="story-fields editor-auth-only" id="story-fields" aria-label="Online story details" hidden>
+        <label>Author<input id="story-author" type="text" maxlength="80" value="Site Editor" autocomplete="off" /></label>
+        <label>Publication<input id="story-publication" type="text" maxlength="80" value="The Open Notebook" autocomplete="off" /></label>
+        <label>Topic<select id="story-topic"><option>Writing</option><option>Creativity</option><option>Technology</option><option>Travel</option><option>Life</option><option>Health</option><option>Culture</option><option>Mindfulness</option><option>Other</option></select></label>
+        <label>Cover photo<select id="story-photo"><option value="/assets/writing-garden.jpg">Writing garden</option><option value="/assets/notebook.jpg">Notebook</option><option value="/assets/train-journal.jpeg">Train journal</option><option value="/assets/river-sunset.jpg">River sunset</option><option value="/assets/forest-wellness.jpg">Forest wellness</option><option value="/assets/city-scenes.jpg">City scenes</option></select></label>
+        <label class="full-width">Photo description<input id="story-photo-alt" type="text" maxlength="180" value="A quiet scene for reading" autocomplete="off" /></label>
+        <label class="published-field full-width"><input id="story-published" type="checkbox" checked /> Publish publicly (uncheck to save as a private online draft)</label>
+      </section>
+      <article class="composer-preview" id="draft-preview" aria-label="Story preview">
+        <h1 class="composer-preview-title" id="draft-preview-title"></h1>
+        <div class="composer-preview-body" id="draft-preview-body"></div>
+      </article>
+      <p class="composer-note">Local drafts stay on this device. Online stories are visible only after you publish them.</p>
+    </div>
+  </dialog>
+  <dialog class="login-dialog" id="editor-login-dialog" aria-labelledby="editor-login-title">
+    <form id="editor-login-form">
+      <h2 id="editor-login-title">Editor sign in</h2>
+      <p>Use the private editor password to manage stories. Readers can browse without signing in.</p>
+      <label for="editor-password">Editor password<input id="editor-password" name="password" type="password" autocomplete="current-password" required maxlength="1024" /></label>
+      <div class="login-error" id="editor-login-error" role="status" aria-live="polite"></div>
+      <div class="login-actions"><button id="close-editor-login" type="button">Cancel</button><button class="primary" id="submit-editor-login" type="submit">Sign in</button></div>
+    </form>
+  </dialog>
+  <dialog class="reader" id="reader" aria-labelledby="reader-title">
+    <div class="reader-toolbar"><span id="reader-label">Reading room</span><button class="reader-close" id="reader-close" type="button" aria-label="Close reader">×</button></div>
+    <div class="reader-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+    <div class="reader-scroll" id="reader-scroll" tabindex="0">
+      <article class="reader-article">
+        <p class="reader-kicker" id="reader-kicker"></p>
+        <h2 class="reader-title" id="reader-title"></h2>
+        <div class="reader-byline-row">
+          <span class="reader-author-avatar" id="reader-author-avatar" aria-hidden="true"></span>
+          <p class="reader-byline" id="reader-byline"></p>
+          <button class="reader-action reader-follow reader-byline-follow" id="reader-follow" type="button" aria-pressed="false">Follow writer</button>
+        </div>
+        <div class="reader-story-toolbar" role="group" aria-label="Story actions">
+          <div class="reader-story-toolbar-group">
+            <button class="story-preview-action applause" type="button" aria-label="Applause preview" data-toast="Applause is a visual preview; no reaction was saved.">✦</button>
+            <button class="story-preview-action responses" type="button" aria-label="Responses preview" data-toast="Responses are not included in this sample reader.">▢</button>
+            <button class="story-preview-action repost" type="button" aria-label="Repost preview" data-toast="Reposts are not included in this sample reader.">↻</button>
+          </div>
+          <div class="reader-story-toolbar-group">
+            <button class="story-preview-action" id="reader-quick-audio" type="button" aria-label="Listen preview" data-toast="Audio narration is a visual preview and is not available in this sample.">▷</button>
+            <button class="story-preview-action" id="reader-quick-bookmark" type="button" aria-label="Save story" aria-pressed="false">♧</button>
+            <button class="story-preview-action" id="reader-quick-share" type="button" aria-label="Share story" title="Share story">↗</button>
+            <button class="story-preview-action" type="button" aria-label="More story actions preview" data-toast="More story actions are not included in this sample.">···</button>
+          </div>
+        </div>
+        <div class="reader-body" id="reader-body"></div>
+      </article>
+    </div>
+    <div class="reader-actions">
+      <div class="reader-actions-group"><button class="reader-action" id="reader-bookmark" type="button" aria-pressed="false">Save story</button><button class="reader-action reader-share" id="reader-share" type="button" aria-label="Share story link" title="Share story link"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.6 6.8-4.1M8.6 13.4l6.8 4.1"></path></svg><span>Share</span></button></div>
+      <button class="reader-action primary" id="reader-read" type="button">Mark as finished</button>
+    </div>
+  </dialog>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script>
+    let stories = [...document.querySelectorAll('.story')];
+    const toast = document.querySelector('.toast');
+    const menuToggle = document.querySelector('#menu-toggle');
+    const mainNavigation = document.querySelector('#main-navigation');
+    const drawerBackdrop = document.querySelector('#drawer-backdrop');
+    const search = document.querySelector('#search');
+    const searchBox = document.querySelector('.search-box');
+    const searchToggle = document.querySelector('#search-toggle');
+    const searchClear = document.querySelector('#search-clear');
+    const emptyState = document.querySelector('#empty-state');
+    const feedView = document.querySelector('#feed-view');
+    const statsView = document.querySelector('#stats-view');
+    const homeLayout = document.querySelector('#home');
+    const membershipView = document.querySelector('#membership-view');
+    const brandLink = document.querySelector('.brand');
+    const reader = document.querySelector('#reader');
+    const readerScroll = document.querySelector('#reader-scroll');
+    const readerProgress = document.querySelector('.reader-progress');
+    const readerProgressFill = document.querySelector('.reader-progress span');
+    const writeButton = document.querySelector('#write-button');
+    const syncButton = document.querySelector('#sync-button');
+    const composer = document.querySelector('#composer');
+    const draftTitle = document.querySelector('#draft-title');
+    const draftBody = document.querySelector('#draft-body');
+    const draftStatus = document.querySelector('#draft-status');
+    const previewToggle = document.querySelector('#preview-toggle');
+    const previewTitle = document.querySelector('#draft-preview-title');
+    const previewBody = document.querySelector('#draft-preview-body');
+    const draftLibrary = document.querySelector('#draft-library');
+    const draftLibraryToggle = document.querySelector('#draft-library-toggle');
+    const draftCount = document.querySelector('#draft-count');
+    const draftList = document.querySelector('#draft-list');
+    const newDraftButton = document.querySelector('#new-draft');
+    const editorLoginButton = document.querySelector('#editor-login-button');
+    const editorLoginDialog = document.querySelector('#editor-login-dialog');
+    const editorLoginForm = document.querySelector('#editor-login-form');
+    const editorPassword = document.querySelector('#editor-password');
+    const editorLoginError = document.querySelector('#editor-login-error');
+    const onlineLibraryToggle = document.querySelector('#online-library-toggle');
+    const onlineLibrary = document.querySelector('#online-library');
+    const onlineStoryList = document.querySelector('#online-story-list');
+    const onlineStoryCount = document.querySelector('#online-story-count');
+    const publishOnlineButton = document.querySelector('#publish-online');
+    const saveDraftButton = document.querySelector('#save-draft');
+    const storyAuthor = document.querySelector('#story-author');
+    const storyPublication = document.querySelector('#story-publication');
+    const storyTopic = document.querySelector('#story-topic');
+    const storyPhoto = document.querySelector('#story-photo');
+    const storyPhotoAlt = document.querySelector('#story-photo-alt');
+    const storyPublished = document.querySelector('#story-published');
+    const manageStoriesButton = document.querySelector('#manage-stories-button');
+    const storageKey = 'reading-room-demo-v1';
+    const originalArticles = {
+      'the-quiet-craft-of-paying-attention': [
+        'On the first Monday in May, I took the same twenty-minute walk I always take and left my headphones at home. Without a podcast filling the gaps, the walk seemed to lengthen. I noticed a bakery opening its blue shutters, a neighbor carrying a basil plant, and the particular patch of afternoon light that lands on the corner wall.',
+        'I used to think attention was something you spent, like a battery. The day asked for so much of it that I tried to conserve what was left. But attention turned out to behave more like a path: the more often I returned to the ordinary details around me, the easier it became to find my way back. Nothing on that route was new. My way of meeting it was.',
+        'Now I keep a small notebook by the door. I write down one thing I would have missed if I had hurried. It is not a productivity system, and the notes do not need to become anything. They are simply proof that a day can hold more than its loudest task.',
+        'The walk still takes twenty minutes. It just feels like a place I have arrived.'
+      ],
+      'make-your-tools-a-little-less-impressive': [
+        'My most useful work tool is a timer that does almost nothing. It cannot score me, build a dashboard, or send a report. It gives me one quiet interval, then it rings. For a long time I assumed a tool had to offer more in order to be worth keeping.',
+        'That assumption made my setup impressive and my work strangely indirect. Before starting a short note, I could spend ten minutes adjusting the system that was meant to help me write it. Every new option brought another tiny decision: which view, which label, which ritual? The overhead was easy to mistake for progress.',
+        'So I started removing things. The task list became a plain page. Notifications became quiet by default. I kept the tools that let me begin, and let the rest go. The change was not dramatic; that was the point. Less ceremony left more room for the work itself.',
+        'A tool is doing enough when you can forget it is there.'
+      ],
+      'what-i-learned-from-missing-my-train': [
+        'I arrived at the station with time to spare and still watched the train leave. I had mistaken the departure board for a suggestion and the coffee line for a short one. For the first few minutes, I did what I always do when a plan breaks: I searched for a faster plan.',
+        'There was no faster connection for an hour. The bench by the window was free, so I sat down with the notebook I had packed for the journey. I wrote a list of things I could not do until the next train: answer a message, make a meeting, get to the hotel. Then the list was over, and the waiting began.',
+        'Outside, rain moved across the platforms in narrow bands. A child counted suitcases. Someone shared half a pastry with a stranger. None of this made the missed train worthwhile, exactly, but it gave the hour its own shape. I stopped treating it as an empty space between the real parts of the trip.',
+        'I still like arriving on time. I am learning that a detour can belong to the story, too.'
+      ],
+      'there-is-no-perfect-time-to-begin-again': [
+        'When a week gets crowded, I wait for a clean morning to begin again. I imagine an empty inbox, a fresh page, and enough time to do the thing properly. Those mornings are rare, and waiting for one can turn a small pause into a much longer one.',
+        'A friend once suggested I make the first step almost laughably small. Not “get back in shape,” but put on shoes and walk to the end of the block. Not “write every day,” but open the file and leave one honest sentence. The small step is not a trick for doing more. It is a way to meet the day you actually have.',
+        'Some starts remain small. Some grow into a habit; others simply make the next decision easier. I no longer need to decide whether this is a fresh start or a continuation. I can do one useful thing, then look up.',
+        'The calendar does not have to agree that today is a good day to begin.'
+      ],
+      'rest-is-not-a-reward-for-finishing': [
+        'I used to write rest at the bottom of a list, as if it were a prize waiting behind every unfinished errand. The list kept finding new items. Rest kept moving to tomorrow, where it would have to compete with the next list.',
+        'The first change was small: I put a pause on the calendar before I knew whether I had earned it. I went outside after lunch. I left one email for the morning. Nothing collapsed. The unfinished work was still there, but it looked less like an emergency once I stopped trying to carry it through every quiet moment.',
+        'This is not an argument for ignoring what matters. It is a reminder that attention and energy are part of the work, not bonuses you receive after it. A rested person is still a person with responsibilities; they are just less likely to meet each one as a crisis.',
+        'Some days the kindest item on the list is the space between the items.'
+      ],
+      'the-city-looks-different-when-you-walk-home': [
+        'I took the long way home because the usual bus was full. One extra block turned into three. I saw a tailor putting a paper sign in the window, a new bench under the plane trees, and a corner shop that had changed its name but kept the same green awning.',
+        'On the bus, my neighborhood becomes a sequence of stops. Walking makes it a collection of small decisions: cross here, pause there, take the street with the late sun. I started noticing the people who give a place its rhythm—the grocer sweeping the same stretch of pavement, the dog that waits outside the library, the children who race the crossing signal.',
+        'The city had not changed much in the hour I was away. My scale had. At street level, a familiar route is not a line between errands. It is a place where other people are also making their way through the day.',
+        'I still take the bus when I am in a hurry. When I am not, I try to leave room for the next block.'
+      ]
+    };
+    let activeTopic = '';
+    let activeView = 'For you';
+    let currentStory = null;
+    let toastTimer;
+    let progressSaveTimer;
+    let draftSaveTimer;
+    let editorAuthenticated = false;
+    let editorCsrfToken = '';
+    let editorStories = [];
+    let editingOnlineStoryId = null;
+    let openComposerAfterLogin = false;
+    let openLibraryAfterLogin = false;
+    const onlineStoryBodies = new Map();
+
+    function isPlainRecord(value) {
+      return Boolean(value && typeof value === 'object' && !Array.isArray(value));
+    }
+    function readSyncTimestampMap(value) {
+      if (!isPlainRecord(value)) return {};
+      return Object.fromEntries(Object.entries(value).filter(([, timestamp]) => typeof timestamp === 'string' && !Number.isNaN(Date.parse(timestamp))));
+    }
+    function readMembershipChangeMap(value) {
+      if (!isPlainRecord(value)) return {};
+      return Object.fromEntries(Object.entries(value).filter(([, record]) => isPlainRecord(record) && typeof record.present === 'boolean' && typeof record.at === 'string' && !Number.isNaN(Date.parse(record.at))).map(([key, record]) => [key, { present: record.present, at: record.at }]));
+    }
+    function readState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        const usedIds = new Set();
+        const drafts = [];
+        const rawDrafts = Array.isArray(saved.drafts) ? saved.drafts : [];
+        rawDrafts.forEach((draft, index) => {
+          if (!draft || typeof draft !== 'object' || Array.isArray(draft)) return;
+          let id = typeof draft.id === 'string' && draft.id ? draft.id : `draft-migrated-${index + 1}`;
+          while (usedIds.has(id)) id = `${id}-${index + 1}`;
+          usedIds.add(id);
+          drafts.push({
+            id,
+            title: typeof draft.title === 'string' ? draft.title.slice(0, 120) : '',
+            body: typeof draft.body === 'string' ? draft.body : '',
+            savedAt: typeof draft.savedAt === 'string' ? draft.savedAt : null
+          });
+        });
+        if (saved.draft && typeof saved.draft === 'object' && !Array.isArray(saved.draft)) {
+          let id = 'legacy-draft';
+          while (usedIds.has(id)) id = `${id}-imported`;
+          drafts.push({
+            id,
+            title: typeof saved.draft.title === 'string' ? saved.draft.title.slice(0, 120) : '',
+            body: typeof saved.draft.body === 'string' ? saved.draft.body : '',
+            savedAt: typeof saved.draft.savedAt === 'string' ? saved.draft.savedAt : null
+          });
+        }
+        const normalized = {
+          ...saved,
+          bookmarks: Array.isArray(saved.bookmarks) ? saved.bookmarks : [],
+          following: Array.isArray(saved.following) ? saved.following : [],
+          progress: saved.progress && typeof saved.progress === 'object' ? saved.progress : {},
+          drafts,
+          activeDraftId: typeof saved.activeDraftId === 'string' && drafts.some(draft => draft.id === saved.activeDraftId)
+            ? saved.activeDraftId : drafts[0]?.id || null,
+          membershipChanges: {
+            bookmarks: readMembershipChangeMap(saved.membershipChanges?.bookmarks),
+            following: readMembershipChangeMap(saved.membershipChanges?.following)
+          },
+          progressUpdatedAt: readSyncTimestampMap(saved.progressUpdatedAt),
+          draftTombstones: readSyncTimestampMap(saved.draftTombstones)
+        };
+        delete normalized.draft;
+        return normalized;
+      } catch {
+        return { bookmarks: [], following: [], progress: {}, drafts: [], activeDraftId: null, membershipChanges: { bookmarks: {}, following: {} }, progressUpdatedAt: {}, draftTombstones: {} };
+      }
+    }
+    let state = readState();
+    function persistState() {
+      try { localStorage.setItem(storageKey, JSON.stringify(state)); return true; } catch { /* Keep the current page usable when storage is unavailable. */ return false; }
+    }
+    persistState();
+    function recordMembershipChange(collection, id, present) {
+      if (!state.membershipChanges) state.membershipChanges = { bookmarks: {}, following: {} };
+      if (!state.membershipChanges[collection]) state.membershipChanges[collection] = {};
+      state.membershipChanges[collection][id] = { present, at: new Date().toISOString() };
+    }
+    function recordProgressChange(id) {
+      if (!state.progressUpdatedAt) state.progressUpdatedAt = {};
+      state.progressUpdatedAt[id] = new Date().toISOString();
+    }
+    function createDraftId() {
+      const randomId = globalThis.crypto?.randomUUID?.();
+      return randomId || `draft-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+    function findDraft(id = state.activeDraftId) { return state.drafts.find(draft => draft.id === id) || null; }
+    function updateDraftCount() {
+      draftCount.textContent = String(state.drafts.length);
+      draftLibraryToggle.setAttribute('aria-label', `Show saved drafts (${state.drafts.length})`);
+    }
+    function renderDraftList() {
+      const fragment = document.createDocumentFragment();
+      if (!state.drafts.length) {
+        const empty = document.createElement('p');
+        empty.className = 'draft-empty';
+        empty.textContent = 'No saved drafts yet. Start a new draft whenever you are ready.';
+        fragment.append(empty);
+      }
+      state.drafts.forEach(draft => {
+        const row = document.createElement('div');
+        row.className = 'draft-row';
+        row.dataset.draftId = draft.id;
+        const summary = document.createElement('div');
+        summary.className = 'draft-row-summary';
+        const open = document.createElement('button');
+        open.className = 'draft-open';
+        open.type = 'button';
+        open.dataset.draftAction = 'open';
+        open.setAttribute('aria-current', String(draft.id === state.activeDraftId));
+        const name = document.createElement('span');
+        name.className = 'draft-name';
+        name.textContent = draft.title.trim() || 'Untitled draft';
+        const date = document.createElement('span');
+        date.className = 'draft-date';
+        const editedAt = draft.savedAt ? new Date(draft.savedAt) : null;
+        date.textContent = editedAt && !Number.isNaN(editedAt.getTime())
+          ? `Edited ${editedAt.toLocaleDateString()}` : 'Saved on this device';
+        open.append(name, date);
+        const actions = document.createElement('div');
+        actions.className = 'draft-row-actions';
+        [['rename', 'Rename'], ['delete', 'Delete']].forEach(([action, label]) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.dataset.draftAction = action;
+          button.textContent = label;
+          if (action === 'delete') button.className = 'draft-delete';
+          actions.append(button);
+        });
+        summary.append(open, actions);
+        const renameForm = document.createElement('div');
+        renameForm.className = 'draft-rename-form';
+        renameForm.hidden = true;
+        const renameInput = document.createElement('input');
+        renameInput.type = 'text';
+        renameInput.maxLength = 120;
+        renameInput.value = draft.title;
+        renameInput.setAttribute('aria-label', `New title for ${draft.title.trim() || 'untitled draft'}`);
+        renameInput.dataset.renameInput = '';
+        const saveRename = document.createElement('button');
+        saveRename.type = 'button';
+        saveRename.className = 'draft-rename-save';
+        saveRename.dataset.draftAction = 'save-rename';
+        saveRename.textContent = 'Save name';
+        const cancelRename = document.createElement('button');
+        cancelRename.type = 'button';
+        cancelRename.dataset.draftAction = 'cancel-rename';
+        cancelRename.textContent = 'Cancel';
+        renameForm.append(renameInput, saveRename, cancelRename);
+        row.append(summary, renameForm);
+        fragment.append(row);
+      });
+      draftList.replaceChildren(fragment);
+      updateDraftCount();
+    }
+    function loadDraftIntoEditor(id) {
+      const draft = findDraft(id);
+      if (!draft) return false;
+      state.activeDraftId = draft.id;
+      persistState();
+      draftTitle.value = draft.title;
+      draftBody.value = draft.body;
+      draftStatus.textContent = 'Draft saved on this device';
+      renderDraftPreview();
+      renderDraftList();
+      return true;
+    }
+    function createDraft() {
+      if (findDraft()) saveDraft(false);
+      const draft = { id: createDraftId(), title: '', body: '', savedAt: new Date().toISOString() };
+      state.drafts.unshift(draft);
+      state.activeDraftId = draft.id;
+      delete state.draftTombstones[draft.id];
+      persistState();
+      loadDraftIntoEditor(draft.id);
+      draftLibrary.hidden = true;
+      draftLibraryToggle.setAttribute('aria-expanded', 'false');
+      composer.dataset.mode = 'write';
+      previewToggle.textContent = 'Preview';
+      previewToggle.setAttribute('aria-pressed', 'false');
+      if (composer.open) requestAnimationFrame(() => draftTitle.focus());
+      return draft;
+    }
+    function renderDraftPreview() {
+      previewTitle.textContent = draftTitle.value.trim() || 'Untitled story';
+      const paragraphs = draftBody.value.trim().split(/\n\s*\n/).filter(Boolean);
+      if (!paragraphs.length) paragraphs.push('Nothing to preview yet.');
+      previewBody.replaceChildren(...paragraphs.map(text => {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = text.trim();
+        return paragraph;
+      }));
+    }
+    function saveDraft(announce = false) {
+      clearTimeout(draftSaveTimer);
+      let draft = findDraft();
+      if (!draft) {
+        draft = { id: createDraftId(), title: '', body: '', savedAt: null };
+        state.drafts.unshift(draft);
+        state.activeDraftId = draft.id;
+      }
+      draft.title = draftTitle.value;
+      draft.body = draftBody.value;
+      draft.savedAt = new Date().toISOString();
+      delete state.draftTombstones[draft.id];
+      const saved = persistState();
+      draftStatus.textContent = saved ? 'Draft saved on this device' : 'Draft could not be saved';
+      renderDraftList();
+      if (announce) showToast(saved ? 'Draft saved on this device' : 'Browser storage is unavailable; draft could not be saved');
+      return saved;
+    }
+    function queueDraftSave() {
+      if (editingOnlineStoryId) return;
+      draftStatus.textContent = 'Unsaved changes';
+      renderDraftPreview();
+      clearTimeout(draftSaveTimer);
+      draftSaveTimer = setTimeout(() => saveDraft(), 500);
+    }
+    function openComposer() {
+      editingOnlineStoryId = null;
+      saveDraftButton.hidden = false;
+      storyPublished.checked = true;
+      publishOnlineButton.textContent = storyPublished.checked ? 'Publish online' : 'Save online draft';
+      onlineLibrary.hidden = true;
+      onlineLibraryToggle.setAttribute('aria-expanded', 'false');
+      if (!findDraft()) {
+        const firstDraft = state.drafts[0];
+        if (firstDraft) state.activeDraftId = firstDraft.id;
+        else createDraft();
+      }
+      loadDraftIntoEditor(state.activeDraftId);
+      composer.dataset.mode = 'write';
+      previewToggle.textContent = 'Preview';
+      previewToggle.setAttribute('aria-pressed', 'false');
+      renderDraftPreview();
+      if (!composer.open) composer.showModal();
+      requestAnimationFrame(() => draftTitle.focus());
+    }
+    function selectDraft(id) {
+      if (!findDraft(id)) return;
+      if (findDraft()) saveDraft(false);
+      loadDraftIntoEditor(id);
+      draftLibrary.hidden = true;
+      draftLibraryToggle.setAttribute('aria-expanded', 'false');
+      composer.dataset.mode = 'write';
+      previewToggle.textContent = 'Preview';
+      previewToggle.setAttribute('aria-pressed', 'false');
+      draftTitle.focus();
+    }
+    function commitDraftRename(id, value) {
+      const draft = findDraft(id);
+      if (!draft) return;
+      if (id === state.activeDraftId) saveDraft(false);
+      draft.title = value.trim().slice(0, 120) || 'Untitled story';
+      draft.savedAt = new Date().toISOString();
+      delete state.draftTombstones[id];
+      if (id === state.activeDraftId) {
+        draftTitle.value = draft.title;
+        renderDraftPreview();
+      }
+      persistState();
+      renderDraftList();
+      showToast('Draft renamed');
+    }
+    function deleteDraft(id) {
+      const draft = findDraft(id);
+      if (!draft) return;
+      const title = draft.title.trim() || 'Untitled draft';
+      if (!window.confirm(`Delete “${title}”? This cannot be undone.`)) return;
+      if (!state.draftTombstones) state.draftTombstones = {};
+      state.draftTombstones[id] = new Date().toISOString();
+      const deletingActiveDraft = id === state.activeDraftId;
+      if (deletingActiveDraft) clearTimeout(draftSaveTimer);
+      state.drafts = state.drafts.filter(item => item.id !== id);
+      if (deletingActiveDraft) {
+        state.activeDraftId = state.drafts[0]?.id || null;
+        if (state.activeDraftId) loadDraftIntoEditor(state.activeDraftId);
+        else {
+          draftTitle.value = '';
+          draftBody.value = '';
+          draftStatus.textContent = 'Draft deleted. Create a new draft when you are ready.';
+          renderDraftPreview();
+        }
+      }
+      persistState();
+      renderDraftList();
+      showToast('Draft deleted');
+    }
+    function storyId(story) {
+      if (story.dataset.storyId) return story.dataset.storyId;
+      return story.querySelector('h2').textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+    function storyById(id) { return stories.find(story => storyId(story) === id); }
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2300);
+    }
+    function setNavigationOpen(open, restoreFocus = true) {
+      mainNavigation.classList.toggle('open', open);
+      mainNavigation.inert = !open;
+      drawerBackdrop.hidden = !open;
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+      if (open) mainNavigation.querySelector('.rail-link')?.focus({ preventScroll: true });
+      else if (restoreFocus && !document.querySelector('dialog[open]')) menuToggle.focus({ preventScroll: true });
+    }
+    function syncTimestamp(value) {
+      const timestamp = typeof value === 'string' ? Date.parse(value) : NaN;
+      return Number.isFinite(timestamp) ? timestamp : 0;
+    }
+    function uniqueSyncStrings(...lists) {
+      const result = [];
+      const seen = new Set();
+      lists.flat().forEach(value => {
+        if (typeof value === 'string' && value && !seen.has(value)) { seen.add(value); result.push(value); }
+      });
+      return result;
+    }
+    function mergeMembership(localItems = [], remoteItems = [], localHistory = {}, remoteHistory = {}) {
+      const localSet = new Set(localItems);
+      const remoteSet = new Set(remoteItems);
+      const ids = uniqueSyncStrings(localItems, remoteItems, Object.keys(localHistory), Object.keys(remoteHistory));
+      const items = [];
+      const history = {};
+      ids.forEach(id => {
+        const localChange = localHistory[id];
+        const remoteChange = remoteHistory[id];
+        let chosen;
+        if (localSet.has(id)) {
+          chosen = localChange || remoteChange || { present: true, at: new Date(0).toISOString() };
+        } else if (localChange && remoteChange) {
+          chosen = syncTimestamp(localChange.at) >= syncTimestamp(remoteChange.at) ? localChange : remoteChange;
+        } else {
+          chosen = localChange || remoteChange || { present: localSet.has(id) || remoteSet.has(id), at: new Date(0).toISOString() };
+        }
+        history[id] = { present: Boolean(chosen.present), at: chosen.at || new Date(0).toISOString() };
+        if (history[id].present) items.push(id);
+      });
+      return { items, history };
+    }
+    function mergeSyncState(local, remote) {
+      const cloud = remote || { bookmarks: [], following: [], progress: {}, drafts: [], activeDraftId: null, membershipChanges: { bookmarks: {}, following: {} }, progressUpdatedAt: {}, draftTombstones: {} };
+      const bookmarks = mergeMembership(local.bookmarks || [], cloud.bookmarks || [], local.membershipChanges?.bookmarks || {}, cloud.membershipChanges?.bookmarks || {});
+      const following = mergeMembership(local.following || [], cloud.following || [], local.membershipChanges?.following || {}, cloud.membershipChanges?.following || {});
+      const progress = { ...(cloud.progress || {}), ...(local.progress || {}) };
+      const progressUpdatedAt = { ...(cloud.progressUpdatedAt || {}), ...(local.progressUpdatedAt || {}) };
+      const localDraftIds = new Set((local.drafts || []).map(draft => draft.id));
+      const draftsById = new Map((cloud.drafts || []).map(draft => [draft.id, draft]));
+      (local.drafts || []).forEach(draft => draftsById.set(draft.id, draft));
+      const draftTombstones = { ...(cloud.draftTombstones || {}), ...(local.draftTombstones || {}) };
+      Object.keys(draftTombstones).forEach(id => {
+        const draft = draftsById.get(id);
+        if (!draft) return;
+        if (localDraftIds.has(id)) { delete draftTombstones[id]; return; }
+        if (syncTimestamp(draftTombstones[id]) >= syncTimestamp(draft.savedAt)) draftsById.delete(id);
+        else delete draftTombstones[id];
+      });
+      const drafts = [...draftsById.values()].sort((a, b) => syncTimestamp(b.savedAt) - syncTimestamp(a.savedAt));
+      const draftIds = new Set(drafts.map(draft => draft.id));
+      const activeDraftId = draftIds.has(local.activeDraftId) ? local.activeDraftId : draftIds.has(cloud.activeDraftId) ? cloud.activeDraftId : drafts[0]?.id || null;
+      return {
+        bookmarks: bookmarks.items,
+        following: following.items,
+        progress,
+        drafts,
+        activeDraftId,
+        membershipChanges: { bookmarks: bookmarks.history, following: following.history },
+        progressUpdatedAt,
+        draftTombstones
+      };
+    }
+    function requestSyncAccess() {
+      try {
+        sessionStorage.removeItem('reading-room-sync-access-ready-v1');
+        sessionStorage.setItem('reading-room-sync-after-access-v1', '1');
+      } catch {
+        showToast('This browser blocks session storage, so private sync cannot start here.');
+        return;
+      }
+      window.location.assign('/api/auth');
+    }
+    async function syncReadingState() {
+      let accessReady = false;
+      try { accessReady = sessionStorage.getItem('reading-room-sync-access-ready-v1') === '1'; } catch { /* The explicit sync remains unavailable without session storage. */ }
+      if (!accessReady) { requestSyncAccess(); return; }
+
+      syncButton.disabled = true;
+      try {
+        clearTimeout(progressSaveTimer);
+        persistState();
+        const response = await fetch('/api/state', { method: 'GET', credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
+        const contentType = response.headers.get('content-type') || '';
+        if (response.status === 401 || response.status === 403 || !contentType.includes('application/json')) {
+          requestSyncAccess();
+          return;
+        }
+        const remoteResult = await response.json();
+        if (!response.ok) throw new Error(remoteResult.error || 'Could not read private sync state');
+        const merged = mergeSyncState(state, remoteResult.state);
+        const localCounts = `This device: ${state.bookmarks.length} bookmarks, ${state.following.length} follows, ${Object.keys(state.progress || {}).length} reading records, ${state.drafts.length} drafts.`;
+        const cloudCounts = `Private account: ${remoteResult.state?.bookmarks?.length || 0} bookmarks, ${remoteResult.state?.following?.length || 0} follows, ${Object.keys(remoteResult.state?.progress || {}).length} reading records, ${remoteResult.state?.drafts?.length || 0} drafts.`;
+        const approved = window.confirm(`Review private sync\n\n${localCounts}\n${cloudCounts}\n\nContinue with a merge? Existing local items are retained; matching drafts keep this device’s version. Only after you choose OK will the merged state be saved to your private account.`);
+        if (!approved) return;
+
+        const writeResponse = await fetch('/api/state', {
+          method: 'PUT',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ expectedRevision: remoteResult.revision, state: merged })
+        });
+        const writeContentType = writeResponse.headers.get('content-type') || '';
+        if (writeResponse.status === 401 || writeResponse.status === 403 || !writeContentType.includes('application/json')) {
+          requestSyncAccess();
+          return;
+        }
+        const writeResult = await writeResponse.json();
+        if (writeResponse.status === 409) {
+          showToast('Cloud data changed on another device. Review sync again to avoid overwriting it.');
+          return;
+        }
+        if (!writeResponse.ok) throw new Error(writeResult.error || 'Could not save private sync state');
+
+        state.bookmarks = merged.bookmarks;
+        state.following = merged.following;
+        state.progress = merged.progress;
+        state.drafts = merged.drafts;
+        state.activeDraftId = merged.activeDraftId;
+        state.membershipChanges = merged.membershipChanges;
+        state.progressUpdatedAt = merged.progressUpdatedAt;
+        state.draftTombstones = merged.draftTombstones;
+        persistState();
+        paintStories();
+        renderStats();
+        filterStories();
+        renderDraftList();
+        updateReaderControls();
+        showToast('Private sync completed. Your device data was kept.');
+      } catch {
+        showToast('Private sync could not finish. Your existing device data is still available.');
+      } finally {
+        syncButton.disabled = false;
+      }
+    }
+    function isBookmarked(story) { return state.bookmarks.includes(storyId(story)); }
+    function progressFor(story) { return state.progress[storyId(story)] || null; }
+    function estimatedReadMinutes(story) {
+      const label = [...story.querySelector('.meta-left').children].map(item => item.textContent).find(text => /\bmin(?:ute)?s?\s+read\b/i.test(text));
+      const match = label?.match(/(\d+)\s*min(?:ute)?s?\s+read/i);
+      return match ? Number(match[1]) : 0;
+    }
+    function renderStats() {
+      const savedCount = stories.filter(story => isBookmarked(story)).length;
+      const finishedStories = stories.filter(story => Boolean(progressFor(story)?.complete));
+      const inProgressCount = stories.filter(story => {
+        const record = progressFor(story);
+        return Boolean(record?.started && !record.complete);
+      }).length;
+      const estimatedMinutes = finishedStories.reduce((total, story) => total + estimatedReadMinutes(story), 0);
+      document.querySelector('#stats-saved').textContent = String(savedCount);
+      document.querySelector('#stats-finished').textContent = String(finishedStories.length);
+      document.querySelector('#stats-in-progress').textContent = String(inProgressCount);
+      document.querySelector('#stats-minutes').textContent = String(estimatedMinutes);
+    }
+    function paintStories() {
+      stories.forEach(story => {
+        const id = storyId(story);
+        const bookmark = story.querySelector('.bookmark');
+        bookmark.setAttribute('aria-pressed', String(state.bookmarks.includes(id)));
+        bookmark.setAttribute('aria-label', `${state.bookmarks.includes(id) ? 'Remove from' : 'Save to'} reading list: ${story.querySelector('h2').textContent}`);
+        const record = state.progress[id];
+        const marker = story.querySelector('.story-state');
+        marker.textContent = record?.complete ? 'Read' : record?.started ? 'In progress' : '';
+        marker.classList.toggle('visible', Boolean(record?.complete || record?.started));
+      });
+    }
+    function filterStories() {
+      const query = (search.value || '').trim().toLowerCase();
+      let shown = 0;
+      stories.forEach(story => {
+        const text = story.textContent.toLowerCase();
+        const topicWords = story.dataset.topics.toLowerCase().split(/\s+/);
+        const visible = (!query || text.includes(query)) && (!activeTopic || topicWords.includes(activeTopic.toLowerCase())) &&
+          (activeView !== 'Bookmarks' || isBookmarked(story)) &&
+          (activeView !== 'Following' || state.following.includes(story.dataset.author));
+        story.classList.toggle('hidden', !visible);
+        if (visible) shown++;
+      });
+      const noMatches = shown === 0;
+      emptyState.classList.toggle('show', noMatches);
+      if (noMatches && activeView === 'Bookmarks' && !query && !activeTopic) emptyState.textContent = 'Your reading list is empty. Save a story to keep it here.';
+      else if (noMatches && activeView === 'Following' && !query && !activeTopic) emptyState.textContent = 'Follow a writer from any story to build your Following feed.';
+      else emptyState.textContent = 'No stories match that yet. Try another search or clear a topic filter.';
+      searchClear.classList.toggle('visible', Boolean(search.value));
+    }
+    function updateView(view) {
+      activeView = view;
+      const isMembershipView = view === 'Membership';
+      if (isMembershipView && mainNavigation.classList.contains('open')) setNavigationOpen(false, false);
+      homeLayout.hidden = isMembershipView;
+      membershipView.hidden = !isMembershipView;
+      document.body.classList.toggle('membership-active', isMembershipView);
+      document.title = isMembershipView ? 'Membership — Medium' : `Medium — ${view === 'For you' ? 'For you' : view}`;
+      if (isMembershipView) return;
+      document.querySelectorAll('.rail-link[data-view]').forEach(item => {
+        const selected = item.dataset.view === activeView;
+        item.classList.toggle('active', selected);
+        if (selected) item.setAttribute('aria-current', 'page'); else item.removeAttribute('aria-current');
+      });
+      document.querySelectorAll('.tab').forEach(item => {
+        const selected = item.dataset.view === activeView;
+        item.classList.toggle('selected', selected);
+        item.setAttribute('aria-selected', String(selected));
+      });
+      const isStatsView = view === 'Stats';
+      feedView.hidden = isStatsView;
+      statsView.hidden = !isStatsView;
+      if (isStatsView) renderStats();
+      const titles = { 'For you': ['For you', 'Stories and ideas picked for your next great read.'], Following: ['Following', 'New stories from writers you follow.'], Bookmarks: ['Your reading list', 'Stories you saved for a quieter moment.'] };
+      document.querySelector('#welcome-title').textContent = titles[view]?.[0] || 'For you';
+      document.querySelector('.welcome p:last-child').textContent = titles[view]?.[1] || titles['For you'][1];
+      if (!isStatsView) filterStories();
+    }
+    function navigateToMembership() {
+      if (reader.open) closeReader();
+      if (location.hash !== '#membership') history.pushState({ route: 'membership' }, '', `${location.pathname}${location.search}#membership`);
+      setNavigationOpen(false, false);
+      updateView('Membership');
+      window.scrollTo(0, 0);
+      brandLink.focus({ preventScroll: true });
+    }
+    function navigateHome() {
+      if (reader.open) closeReader();
+      if (location.hash !== '#home') history.pushState({ route: 'home' }, '', `${location.pathname}${location.search}#home`);
+      setNavigationOpen(false, false);
+      updateView('For you');
+      window.scrollTo(0, 0);
+      brandLink.focus({ preventScroll: true });
+    }
+    function syncMembershipRoute() {
+      if (location.hash === '#membership') {
+        if (reader.open) closeReader();
+        updateView('Membership');
+        return;
+      }
+      if (activeView === 'Membership') {
+        if (reader.open) closeReader();
+        updateView('For you');
+      }
+    }
+    function setBookmark(story, save, announce = true) {
+      const id = storyId(story);
+      state.bookmarks = save ? [...new Set([...state.bookmarks, id])] : state.bookmarks.filter(item => item !== id);
+      recordMembershipChange('bookmarks', id, save);
+      persistState();
+      paintStories();
+      renderStats();
+      if (currentStory === story) updateReaderControls();
+      filterStories();
+      if (announce) showToast(save ? 'Added to your reading list' : 'Removed from your reading list');
+    }
+    function setFollow(author) {
+      state.following = state.following.includes(author) ? state.following.filter(name => name !== author) : [...state.following, author];
+      recordMembershipChange('following', author, state.following.includes(author));
+      persistState();
+      updateReaderControls();
+      paintSuggestedFollows();
+      filterStories();
+      showToast(state.following.includes(author) ? `Following ${author}` : `Unfollowed ${author}`);
+    }
+    function paintSuggestedFollows() {
+      document.querySelectorAll('[data-follow-author]').forEach(button => {
+        const followed = state.following.includes(button.dataset.followAuthor);
+        button.textContent = followed ? 'Following' : 'Follow';
+        button.setAttribute('aria-pressed', String(followed));
+      });
+    }
+    function updateReaderControls() {
+      if (!currentStory) return;
+      const saved = isBookmarked(currentStory);
+      const author = currentStory.dataset.author;
+      const followed = state.following.includes(author);
+      document.querySelector('#reader-bookmark').textContent = saved ? 'Saved to list' : 'Save story';
+      document.querySelector('#reader-bookmark').setAttribute('aria-pressed', String(saved));
+      document.querySelector('#reader-quick-bookmark').setAttribute('aria-pressed', String(saved));
+      document.querySelector('#reader-quick-bookmark').setAttribute('aria-label', saved ? 'Remove from reading list' : 'Save to reading list');
+      document.querySelector('#reader-follow').textContent = followed ? `Following ${author}` : `Follow ${author}`;
+      document.querySelector('#reader-follow').setAttribute('aria-pressed', String(followed));
+      const complete = Boolean(progressFor(currentStory)?.complete);
+      const readButton = document.querySelector('#reader-read');
+      readButton.textContent = complete ? 'Mark as unread' : 'Mark as finished';
+      readButton.setAttribute('aria-pressed', String(complete));
+    }
+    function updateProgressMeter(value) {
+      const percent = Math.round(Math.max(0, Math.min(1, value)) * 100);
+      readerProgressFill.style.width = `${percent}%`;
+      readerProgress.setAttribute('aria-valuenow', String(percent));
+    }
+    function openStory(story, updateHash = true) {
+      if (!story) return;
+      currentStory = story;
+      const id = storyId(story);
+      const record = progressFor(story) || { progress: 0, started: true, complete: false };
+      if (!record.complete) record.started = true;
+      state.progress[id] = record;
+      recordProgressChange(id);
+      persistState();
+      renderStats();
+      const title = story.querySelector('h2').textContent;
+      const meta = story.querySelector('.meta-left');
+      const readTime = [...meta.children].find(item => item.textContent.includes('min read'))?.textContent || '';
+      const topic = meta.querySelector('.topic-pill')?.textContent || 'A short read';
+      document.querySelector('#reader-label').textContent = `Reading room · ${story.dataset.managedStoryId ? 'online story' : 'original demo story'}`;
+      document.querySelector('#reader-title').textContent = title;
+      document.querySelector('#reader-kicker').textContent = `${topic} · ${readTime}`;
+      document.querySelector('#reader-byline').textContent = story.querySelector('.byline span:last-child').textContent.trim();
+      document.querySelector('#reader-author-avatar').textContent = (story.dataset.author || 'Reader').split(/\s+/u).map(name => name[0]).slice(0, 2).join('').toUpperCase();
+      const body = document.querySelector('#reader-body');
+      const onlineBody = onlineStoryBodies.get(id);
+      const paragraphs = onlineBody
+        ? onlineBody.trim().split(/\n\s*\n/u).map(text => text.trim()).filter(Boolean)
+        : (originalArticles[id] || [story.querySelector('.story-summary').textContent]);
+      body.replaceChildren(...paragraphs.map(copy => {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = copy;
+        return paragraph;
+      }));
+      readerScroll.scrollTop = 0;
+      updateProgressMeter(record.complete ? 1 : record.progress || 0);
+      updateReaderControls();
+      paintStories();
+      filterStories();
+      if (updateHash) history.replaceState(null, '', `${location.pathname}${location.search}#story-${id}`);
+      if (!reader.open) reader.showModal();
+      requestAnimationFrame(() => {
+        const maxScroll = Math.max(0, readerScroll.scrollHeight - readerScroll.clientHeight);
+        readerScroll.scrollTop = maxScroll * (record.complete ? 1 : record.progress || 0);
+        document.querySelector('#reader-close').focus();
+      });
+    }
+    function closeReader() {
+      if (reader.open) reader.close();
+    }
+    function toggleFinished() {
+      if (!currentStory) return;
+      const id = storyId(currentStory);
+      const complete = !progressFor(currentStory)?.complete;
+      state.progress[id] = { ...(progressFor(currentStory) || {}), started: true, complete, progress: complete ? 1 : 0 };
+      recordProgressChange(id);
+      persistState();
+      updateProgressMeter(complete ? 1 : 0);
+      updateReaderControls();
+      paintStories();
+      renderStats();
+      showToast(complete ? 'Marked as read' : 'Marked as unread');
+    }
+    async function copyStoryLink(link) {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(link);
+          showToast('Story link copied');
+          return true;
+        } catch { /* Fall back to a selection-based copy when clipboard permissions are unavailable. */ }
+      }
+      const fallback = document.createElement('textarea');
+      fallback.value = link;
+      fallback.setAttribute('readonly', '');
+      fallback.setAttribute('aria-hidden', 'true');
+      fallback.setAttribute('tabindex', '-1');
+      fallback.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;';
+      const focusedElement = document.activeElement;
+      (reader.open ? reader : document.body).append(fallback);
+      fallback.focus();
+      fallback.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch { /* Report failure through the live region below. */ }
+      fallback.remove();
+      focusedElement?.focus?.();
+      showToast(copied ? 'Story link copied' : 'Could not copy the story link.');
+      return copied;
+    }
+    async function shareStory(story) {
+      const url = new URL(location.href);
+      url.hash = `story-${storyId(story)}`;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: story.querySelector('h2').textContent, url: url.href });
+          return;
+        } catch (error) {
+          if (error?.name === 'AbortError') return;
+        }
+      }
+      await copyStoryLink(url.href);
+    }
+
+    function setEditorAuthentication(authenticated, csrfToken = '') {
+      editorAuthenticated = authenticated;
+      editorCsrfToken = authenticated ? csrfToken : '';
+      editorLoginButton.textContent = authenticated ? 'Sign out' : 'Sign in';
+      editorLoginButton.setAttribute('aria-label', authenticated ? 'Sign out of editor' : 'Editor sign in');
+      document.querySelectorAll('.editor-auth-only').forEach(control => { control.hidden = !authenticated; });
+      document.querySelectorAll('.story-admin-card-actions').forEach(control => { control.hidden = !authenticated; });
+      if (!authenticated) {
+        editorStories = [];
+        onlineLibrary.hidden = true;
+        onlineLibraryToggle.setAttribute('aria-expanded', 'false');
+        renderOnlineLibrary();
+      } else {
+        loadEditorStories();
+      }
+    }
+    function openEditorLogin() {
+      editorLoginError.textContent = '';
+      if (!editorLoginDialog.open) editorLoginDialog.showModal();
+      requestAnimationFrame(() => editorPassword.focus());
+    }
+    async function editorRequest(path, { method = 'GET', body } = {}) {
+      const headers = new Headers({ Accept: 'application/json' });
+      if (body !== undefined) headers.set('Content-Type', 'application/json');
+      if (method !== 'GET' && method !== 'HEAD' && path !== '/api/editor/login' && editorCsrfToken) {
+        headers.set('X-CSRF-Token', editorCsrfToken);
+      }
+      return fetch(path, {
+        method,
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers,
+        body: body === undefined ? undefined : JSON.stringify(body)
+      });
+    }
+    async function readApiJson(response) {
+      const contentType = response.headers.get('content-type') || '';
+      const payload = contentType.includes('application/json') ? await response.json() : {};
+      if (!response.ok) {
+        const error = new Error(payload.error || `Request failed (${response.status})`);
+        error.status = response.status;
+        throw error;
+      }
+      return payload;
+    }
+    async function loadEditorSession() {
+      try {
+        const response = await editorRequest('/api/editor/session');
+        const data = await readApiJson(response);
+        setEditorAuthentication(data.authenticated === true, data.csrfToken || '');
+      } catch {
+        setEditorAuthentication(false);
+      }
+    }
+    async function loadPublicStories() {
+      try {
+        const response = await fetch('/api/stories', { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
+        const data = await readApiJson(response);
+        mountOnlineStories(Array.isArray(data.stories) ? data.stories : []);
+      } catch {
+        // Static previews without the Worker keep showing the built-in demo stories.
+      }
+    }
+    async function loadEditorStories() {
+      if (!editorAuthenticated) return;
+      try {
+        const response = await editorRequest('/api/editor/stories');
+        const data = await readApiJson(response);
+        editorStories = Array.isArray(data.stories) ? data.stories : [];
+        renderOnlineLibrary();
+      } catch (error) {
+        if (error.status === 401) setEditorAuthentication(false);
+        if (onlineLibrary && !onlineLibrary.hidden) showToast('Online stories could not be loaded. Your local drafts are unchanged.');
+      }
+    }
+    function createStoryAdminButton(label, action, className = '') {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.storyAdminAction = action;
+      button.className = className;
+      button.textContent = label;
+      return button;
+    }
+    function bindStoryCard(story) {
+      const storyTools = story.querySelector('.story-tools');
+      if (storyTools && !storyTools.querySelector('.story-preview-action')) {
+        const responses = document.createElement('button');
+        responses.type = 'button';
+        responses.className = 'story-preview-action responses';
+        responses.textContent = '▢';
+        responses.setAttribute('aria-label', 'Responses preview');
+        responses.title = 'Responses are not included in this sample.';
+        responses.addEventListener('click', () => showToast('Responses are not included in this sample reader.'));
+        const applause = document.createElement('button');
+        applause.type = 'button';
+        applause.className = 'story-preview-action applause';
+        applause.textContent = '✦';
+        applause.setAttribute('aria-label', 'Applause preview');
+        applause.title = 'Applause is a visual preview and is not saved.';
+        applause.addEventListener('click', () => showToast('Applause is a visual preview; no reaction was saved.'));
+        storyTools.prepend(responses);
+        storyTools.prepend(applause);
+      }
+      const heading = story.querySelector('h2');
+      let titleButton = heading.querySelector('.story-title-button');
+      if (!titleButton) {
+        titleButton = document.createElement('button');
+        titleButton.type = 'button';
+        titleButton.className = 'story-title-button';
+        titleButton.dataset.openStory = '';
+        titleButton.textContent = heading.textContent;
+        titleButton.setAttribute('aria-label', `Read ${heading.textContent}`);
+        heading.replaceChildren(titleButton);
+      }
+      if (!story.querySelector('.story-state')) {
+        const marker = document.createElement('span');
+        marker.className = 'story-state';
+        story.querySelector('.meta-left').append(marker);
+      }
+      story.querySelector('.bookmark').addEventListener('click', event => {
+        event.stopPropagation();
+        setBookmark(story, !isBookmarked(story));
+      });
+      story.querySelector('.more').setAttribute('aria-label', `Share ${titleButton.textContent}`);
+      story.querySelector('.more').addEventListener('click', () => shareStory(story));
+      titleButton.addEventListener('click', () => openStory(story));
+      if (story.dataset.managedStoryId) {
+        const tools = story.querySelector('.story-tools');
+        const adminActions = document.createElement('div');
+        adminActions.className = 'story-admin-card-actions editor-auth-only';
+        adminActions.hidden = !editorAuthenticated;
+        const edit = createStoryAdminButton('Edit', 'edit');
+        const remove = createStoryAdminButton('Delete', 'delete');
+        edit.addEventListener('click', () => startEditingOnlineStory(story.dataset.managedStoryId));
+        remove.addEventListener('click', () => deleteOnlineStory(story.dataset.managedStoryId));
+        adminActions.append(edit, remove);
+        tools.append(adminActions);
+      }
+    }
+    function makeOnlineStoryCard(item) {
+      const story = document.createElement('article');
+      story.className = 'story';
+      story.dataset.author = item.author;
+      story.dataset.topics = item.topic;
+      story.dataset.storyId = `online-${item.id}`;
+      story.dataset.managedStoryId = item.id;
+      const copy = document.createElement('div');
+      copy.className = 'story-copy';
+      const byline = document.createElement('div');
+      byline.className = 'byline';
+      const avatar = document.createElement('span');
+      avatar.className = 'mini-avatar';
+      avatar.textContent = item.author.split(/\s+/u).map(part => part[0]).join('').slice(0, 2).toUpperCase();
+      const bylineText = document.createElement('span');
+      const authorName = document.createElement('strong');
+      authorName.textContent = item.author;
+      bylineText.append(authorName, document.createTextNode(` in ${item.publication}`));
+      byline.append(avatar, bylineText);
+      const title = document.createElement('h2');
+      title.textContent = item.title;
+      const summary = document.createElement('p');
+      summary.className = 'story-summary';
+      summary.textContent = item.summary;
+      const meta = document.createElement('div');
+      meta.className = 'story-meta';
+      const metaLeft = document.createElement('div');
+      metaLeft.className = 'meta-left';
+      const publishedDate = item.publishedAt ? new Date(item.publishedAt) : new Date();
+      const dateLabel = document.createElement('span');
+      dateLabel.textContent = Number.isNaN(publishedDate.getTime()) ? 'Online' : publishedDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      const separator = document.createElement('span');
+      separator.className = 'meta-dot';
+      separator.textContent = '·';
+      const readTime = document.createElement('span');
+      readTime.textContent = `${Math.max(1, Number(item.readMinutes) || 1)} min read`;
+      const topic = document.createElement('span');
+      topic.className = 'topic-pill';
+      topic.textContent = item.topic;
+      metaLeft.append(dateLabel, separator, readTime, topic);
+      const tools = document.createElement('div');
+      tools.className = 'story-tools';
+      const bookmark = document.createElement('button');
+      bookmark.className = 'bookmark';
+      bookmark.type = 'button';
+      bookmark.setAttribute('aria-label', `Save ${item.title}`);
+      bookmark.setAttribute('aria-pressed', 'false');
+      bookmark.textContent = '♧';
+      const share = document.createElement('button');
+      share.className = 'more';
+      share.type = 'button';
+      share.textContent = '···';
+      tools.append(bookmark, share);
+      meta.append(metaLeft, tools);
+      copy.append(byline, title, summary, meta);
+      const image = document.createElement('img');
+      image.className = 'story-image';
+      const safePhoto = ['/assets/city-scenes.jpg', '/assets/forest-wellness.jpg', '/assets/notebook.jpg', '/assets/river-sunset.jpg', '/assets/train-journal.jpeg', '/assets/writing-garden.jpg'].includes(item.photo)
+        ? item.photo : '/assets/notebook.jpg';
+      image.src = safePhoto;
+      image.alt = item.photoAlt || '';
+      story.append(copy, image);
+      onlineStoryBodies.set(`online-${item.id}`, item.body);
+      return story;
+    }
+    function mountOnlineStories(items) {
+      const container = document.querySelector('#stories');
+      container.querySelectorAll('.story[data-managed-story-id]').forEach(story => story.remove());
+      onlineStoryBodies.clear();
+      items.forEach(item => {
+        const card = makeOnlineStoryCard(item);
+        container.append(card);
+        bindStoryCard(card);
+      });
+      stories = [...container.querySelectorAll('.story')];
+      paintStories();
+      renderStats();
+      filterStories();
+      const hashId = location.hash.startsWith('#story-') ? location.hash.slice(7) : '';
+      if (hashId.startsWith('online-') && !reader.open) openStory(storyById(hashId), false);
+    }
+    function renderOnlineLibrary() {
+      onlineStoryList.replaceChildren();
+      onlineStoryCount.textContent = `${editorStories.length} ${editorStories.length === 1 ? 'story' : 'stories'}`;
+      if (!editorStories.length) {
+        const empty = document.createElement('p');
+        empty.className = 'draft-empty';
+        empty.textContent = 'No online stories yet. Write one and save it here as a public story or private online draft.';
+        onlineStoryList.append(empty);
+        return;
+      }
+      editorStories.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'online-story-row';
+        const summary = document.createElement('div');
+        const title = document.createElement('div');
+        title.className = 'online-story-name';
+        title.textContent = item.title || 'Untitled story';
+        const stateLabel = document.createElement('div');
+        stateLabel.className = 'online-story-state';
+        stateLabel.textContent = item.published ? 'Published and public' : 'Private online draft';
+        summary.append(title, stateLabel);
+        const actions = document.createElement('div');
+        actions.className = 'story-admin-actions';
+        const edit = createStoryAdminButton('Edit', 'edit');
+        const remove = createStoryAdminButton('Delete', 'delete', 'delete');
+        edit.addEventListener('click', () => startEditingOnlineStory(item.id));
+        remove.addEventListener('click', () => deleteOnlineStory(item.id));
+        actions.append(edit, remove);
+        row.append(summary, actions);
+        onlineStoryList.append(row);
+      });
+    }
+    function openManageStories() {
+      if (!editorAuthenticated) {
+        openLibraryAfterLogin = true;
+        openEditorLogin();
+        return;
+      }
+      editingOnlineStoryId = null;
+      composer.dataset.mode = 'manage';
+      onlineLibrary.hidden = false;
+      onlineLibraryToggle.setAttribute('aria-expanded', 'true');
+      draftLibrary.hidden = true;
+      draftLibraryToggle.setAttribute('aria-expanded', 'false');
+      saveDraftButton.hidden = true;
+      publishOnlineButton.hidden = true;
+      if (!composer.open) composer.showModal();
+      loadEditorStories();
+    }
+    function updatePublishButtonLabel() {
+      if (editingOnlineStoryId) publishOnlineButton.textContent = storyPublished.checked ? 'Save online changes' : 'Save online draft';
+      else publishOnlineButton.textContent = storyPublished.checked ? 'Publish online' : 'Save online draft';
+    }
+    async function startEditingOnlineStory(id) {
+      if (!editorAuthenticated) { openEditorLogin(); return; }
+      let item = editorStories.find(story => story.id === id);
+      if (!item) {
+        await loadEditorStories();
+        item = editorStories.find(story => story.id === id);
+      }
+      if (!item) { showToast('That online story is no longer available.'); return; }
+      editingOnlineStoryId = item.id;
+      draftTitle.value = item.title;
+      draftBody.value = item.body;
+      storyAuthor.value = item.author;
+      storyPublication.value = item.publication;
+      storyTopic.value = item.topic;
+      storyPhoto.value = item.photo;
+      storyPhotoAlt.value = item.photoAlt || '';
+      storyPublished.checked = item.published;
+      composer.dataset.mode = 'write';
+      onlineLibrary.hidden = true;
+      onlineLibraryToggle.setAttribute('aria-expanded', 'false');
+      saveDraftButton.hidden = true;
+      publishOnlineButton.hidden = false;
+      updatePublishButtonLabel();
+      draftStatus.textContent = item.published ? 'Editing a published online story.' : 'Editing a private online draft.';
+      renderDraftPreview();
+      if (!composer.open) composer.showModal();
+      requestAnimationFrame(() => draftTitle.focus());
+    }
+    async function deleteOnlineStory(id) {
+      if (!editorAuthenticated) { openEditorLogin(); return; }
+      const item = editorStories.find(story => story.id === id);
+      if (!window.confirm(`Delete “${item?.title || 'this online story'}”? This only affects stories managed in this site.`)) return;
+      try {
+        const response = await editorRequest(`/api/editor/stories/${encodeURIComponent(id)}`, { method: 'DELETE', body: {} });
+        await readApiJson(response);
+        if (currentStory?.dataset.managedStoryId === id) closeReader();
+        await loadEditorStories();
+        await loadPublicStories();
+        showToast('Online story deleted. Your local reading data was left unchanged.');
+      } catch (error) {
+        if (error.status === 401) { setEditorAuthentication(false); openEditorLogin(); }
+        else showToast('The online story could not be deleted.');
+      }
+    }
+    async function saveOnlineStory() {
+      if (!editorAuthenticated) { openEditorLogin(); return; }
+      const payload = {
+        title: draftTitle.value,
+        summary: draftBody.value.trim().split(/\n\s*\n/u).filter(Boolean)[0]?.slice(0, 280) || '',
+        body: draftBody.value,
+        author: storyAuthor.value,
+        publication: storyPublication.value,
+        topic: storyTopic.value,
+        photo: storyPhoto.value,
+        photoAlt: storyPhotoAlt.value,
+        published: storyPublished.checked
+      };
+      if (!payload.title.trim() || !payload.body.trim()) { showToast('Add a title and story text before saving online.'); return; }
+      const editingId = editingOnlineStoryId;
+      publishOnlineButton.disabled = true;
+      try {
+        const response = await editorRequest(editingId ? `/api/editor/stories/${encodeURIComponent(editingId)}` : '/api/editor/stories', {
+          method: editingId ? 'PUT' : 'POST',
+          body: payload
+        });
+        const result = await readApiJson(response);
+        editingOnlineStoryId = null;
+        saveDraftButton.hidden = false;
+        composer.close();
+        await loadEditorStories();
+        await loadPublicStories();
+        showToast(result.story.published ? 'Story published for public readers.' : 'Private online draft saved.');
+      } catch (error) {
+        if (error.status === 401) { setEditorAuthentication(false); openEditorLogin(); }
+        else showToast(error.message === 'Invalid photo' ? 'Choose a cover photo from the existing library.' : 'The online story could not be saved. Check the story details and try again.');
+      } finally {
+        publishOnlineButton.disabled = false;
+      }
+    }
+
+    stories.forEach(bindStoryCard);
+    paintStories();
+    paintSuggestedFollows();
+    renderDraftList();
+    menuToggle.addEventListener('click', () => setNavigationOpen(!mainNavigation.classList.contains('open')));
+    drawerBackdrop.addEventListener('click', () => setNavigationOpen(false));
+    mainNavigation.addEventListener('click', event => {
+      if (event.target.closest('button.rail-link')) setNavigationOpen(false);
+    });
+    brandLink.addEventListener('click', event => { event.preventDefault(); navigateHome(); });
+    document.querySelectorAll('[data-membership-route]').forEach(button => button.addEventListener('click', navigateToMembership));
+    document.querySelector('#membership-back-home').addEventListener('click', navigateHome);
+    document.querySelector('#membership-return-home').addEventListener('click', navigateHome);
+    document.querySelector('#membership-benefits-button').addEventListener('click', () => {
+      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      document.querySelector('#membership-benefits').scrollIntoView({ behavior, block: 'start' });
+    });
+    document.querySelector('#membership-read-story').addEventListener('click', () => {
+      const featuredStory = storyById('the-quiet-craft-of-paying-attention');
+      if (featuredStory) openStory(featuredStory);
+    });
+    window.addEventListener('hashchange', syncMembershipRoute);
+    window.addEventListener('popstate', syncMembershipRoute);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && mainNavigation.classList.contains('open')) setNavigationOpen(false);
+    });
+    document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => updateView(button.dataset.view)));
+    document.querySelectorAll('[data-follow-author]').forEach(button => button.addEventListener('click', () => setFollow(button.dataset.followAuthor)));
+    document.querySelector('#right-write-button').addEventListener('click', () => writeButton.click());
+    document.querySelectorAll('[data-toast]').forEach(button => button.addEventListener('click', () => showToast(button.dataset.toast)));
+    writeButton.addEventListener('click', () => {
+      if (!editorAuthenticated) { openComposerAfterLogin = true; openEditorLogin(); return; }
+      openComposer();
+    });
+    editorLoginButton.addEventListener('click', async () => {
+      if (!editorAuthenticated) { openEditorLogin(); return; }
+      editorLoginButton.disabled = true;
+      try {
+        await readApiJson(await editorRequest('/api/editor/logout', { method: 'POST', body: {} }));
+        setEditorAuthentication(false);
+        editingOnlineStoryId = null;
+        if (composer.open) composer.close();
+        showToast('You are signed out of the editor.');
+      } catch {
+        setEditorAuthentication(false);
+        showToast('The editor session ended. Sign in again to manage stories.');
+      } finally {
+        editorLoginButton.disabled = false;
+      }
+    });
+    editorLoginForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      editorLoginError.textContent = '';
+      const submit = document.querySelector('#submit-editor-login');
+      submit.disabled = true;
+      try {
+        const response = await editorRequest('/api/editor/login', { method: 'POST', body: { password: editorPassword.value } });
+        const data = await readApiJson(response);
+        editorPassword.value = '';
+        setEditorAuthentication(true, data.csrfToken);
+        editorLoginDialog.close();
+        showToast('Editor access is ready.');
+        if (openLibraryAfterLogin) openManageStories();
+        else if (openComposerAfterLogin) openComposer();
+        openLibraryAfterLogin = false;
+        openComposerAfterLogin = false;
+      } catch (error) {
+        editorPassword.value = '';
+        editorLoginError.textContent = error.status === 429 ? 'Too many attempts. Wait 15 minutes and try again.' : 'Sign-in failed. Check the password and try again.';
+        editorPassword.focus();
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    document.querySelector('#close-editor-login').addEventListener('click', () => {
+      openComposerAfterLogin = false;
+      openLibraryAfterLogin = false;
+      editorPassword.value = '';
+      editorLoginDialog.close();
+    });
+    manageStoriesButton.addEventListener('click', openManageStories);
+    onlineLibraryToggle.addEventListener('click', () => {
+      if (!editorAuthenticated) { openEditorLogin(); return; }
+      const expanded = onlineLibrary.hidden;
+      onlineLibrary.hidden = !expanded;
+      onlineLibraryToggle.setAttribute('aria-expanded', String(expanded));
+      if (expanded) loadEditorStories();
+      else if (composer.dataset.mode === 'manage') {
+        composer.dataset.mode = 'write';
+        saveDraftButton.hidden = false;
+      }
+    });
+    publishOnlineButton.addEventListener('click', saveOnlineStory);
+    storyPublished.addEventListener('change', updatePublishButtonLabel);
+    composer.addEventListener('close', () => writeButton.focus());
+    draftLibraryToggle.addEventListener('click', () => {
+      const expanded = draftLibrary.hidden;
+      draftLibrary.hidden = !expanded;
+      draftLibraryToggle.setAttribute('aria-expanded', String(expanded));
+      if (expanded) renderDraftList();
+    });
+    newDraftButton.addEventListener('click', createDraft);
+    draftList.addEventListener('click', event => {
+      const button = event.target.closest('button[data-draft-action]');
+      const row = button?.closest('.draft-row');
+      if (!button || !row) return;
+      const id = row.dataset.draftId;
+      if (button.dataset.draftAction === 'open') selectDraft(id);
+      if (button.dataset.draftAction === 'rename') {
+        if (id === state.activeDraftId) {
+          saveDraft(false);
+          const refreshedRow = [...draftList.children].find(item => item.dataset.draftId === id);
+          if (refreshedRow) row.replaceWith(refreshedRow);
+        }
+        const activeRow = [...draftList.children].find(item => item.dataset.draftId === id);
+        const form = activeRow?.querySelector('.draft-rename-form');
+        if (form) {
+          form.hidden = false;
+          const input = form.querySelector('[data-rename-input]');
+          input.focus();
+          input.select();
+        }
+      }
+      if (button.dataset.draftAction === 'save-rename') {
+        const input = row.querySelector('[data-rename-input]');
+        commitDraftRename(id, input.value);
+      }
+      if (button.dataset.draftAction === 'cancel-rename') row.querySelector('.draft-rename-form').hidden = true;
+      if (button.dataset.draftAction === 'delete') deleteDraft(id);
+    });
+    draftList.addEventListener('keydown', event => {
+      const input = event.target.closest('[data-rename-input]');
+      if (!input) return;
+      const row = input.closest('.draft-row');
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        commitDraftRename(row.dataset.draftId, input.value);
+      } else if (event.key === 'Escape') {
+        row.querySelector('.draft-rename-form').hidden = true;
+      }
+    });
+    document.querySelector('#close-composer').addEventListener('click', () => composer.close());
+    document.querySelector('#save-draft').addEventListener('click', () => saveDraft(true));
+    previewToggle.addEventListener('click', () => {
+      const showPreview = composer.dataset.mode !== 'preview';
+      composer.dataset.mode = showPreview ? 'preview' : 'write';
+      previewToggle.textContent = showPreview ? 'Edit' : 'Preview';
+      previewToggle.setAttribute('aria-pressed', String(showPreview));
+      renderDraftPreview();
+      if (!showPreview) draftBody.focus();
+    });
+    draftTitle.addEventListener('input', queueDraftSave);
+    draftBody.addEventListener('input', queueDraftSave);
+    composer.addEventListener('close', () => writeButton.focus());
+    document.querySelectorAll('[data-topic]').forEach(button => button.addEventListener('click', () => {
+      activeTopic = activeTopic === button.dataset.topic ? '' : button.dataset.topic;
+      document.querySelectorAll('[data-topic]').forEach(topic => topic.setAttribute('aria-pressed', String(topic.dataset.topic === activeTopic)));
+      filterStories();
+      document.querySelector('#stories').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
+    search.addEventListener('input', filterStories);
+    searchToggle.addEventListener('click', () => {
+      searchBox.classList.add('is-open');
+      searchToggle.setAttribute('aria-expanded', 'true');
+      search.focus();
+    });
+    searchClear.addEventListener('click', () => {
+      if (search.value) {
+        search.value = '';
+        filterStories();
+        search.focus();
+      } else {
+        searchBox.classList.remove('is-open');
+        searchToggle.setAttribute('aria-expanded', 'false');
+        searchToggle.focus();
+      }
+    });
+    search.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        if (search.value) { search.value = ''; filterStories(); }
+        else { searchBox.classList.remove('is-open'); searchToggle.setAttribute('aria-expanded', 'false'); searchToggle.focus(); }
+      }
+    });
+    document.querySelector('#reader-close').addEventListener('click', closeReader);
+    document.querySelector('#reader-bookmark').addEventListener('click', () => setBookmark(currentStory, !isBookmarked(currentStory)));
+    document.querySelector('#reader-share').addEventListener('click', () => currentStory && shareStory(currentStory));
+    document.querySelector('#reader-quick-bookmark').addEventListener('click', () => document.querySelector('#reader-bookmark').click());
+    document.querySelector('#reader-quick-share').addEventListener('click', () => document.querySelector('#reader-share').click());
+    document.querySelector('#reader-follow').addEventListener('click', () => currentStory && setFollow(currentStory.dataset.author));
+    document.querySelector('#reader-read').addEventListener('click', toggleFinished);
+    readerScroll.addEventListener('scroll', () => {
+      if (!currentStory) return;
+      const maxScroll = readerScroll.scrollHeight - readerScroll.clientHeight;
+      const position = maxScroll > 0 ? readerScroll.scrollTop / maxScroll : 0;
+      updateProgressMeter(progressFor(currentStory)?.complete ? 1 : position);
+      if (progressFor(currentStory)?.complete) return;
+      const id = storyId(currentStory);
+      state.progress[id] = { ...(progressFor(currentStory) || {}), started: true, complete: false, progress: position };
+      recordProgressChange(id);
+      clearTimeout(progressSaveTimer);
+      progressSaveTimer = setTimeout(() => { persistState(); paintStories(); renderStats(); }, 250);
+    });
+    reader.addEventListener('close', () => {
+      if (location.hash.startsWith('#story-')) {
+        const routeHash = activeView === 'Membership' ? '#membership' : '';
+        history.replaceState(null, '', `${location.pathname}${location.search}${routeHash}`);
+      }
+      currentStory?.querySelector('.story-title-button')?.focus();
+    });
+    document.querySelectorAll('[data-topic]').forEach(button => button.setAttribute('aria-pressed', 'false'));
+    updateView(location.hash === '#membership' ? 'Membership' : 'For you');
+    if (location.hash.startsWith('#story-')) openStory(storyById(location.hash.slice(7)), false);
+    loadPublicStories();
+    loadEditorSession();
+  </script>
+</body>
+</html>
